@@ -1,0 +1,75 @@
+#+title: Backend for the Code challenge (NinjaOne)
+#+author: Yeinier Ferrás Cecilio.
+#+LANGUAGE: en
+
+
+* Main target
+
+Implement a REST API in Java with data persistency and caching to fulfill the
+basic requirements of a Remote Monitoring and Management (RMM) platform.
+
+** Introduction
+
+A Remote Monitoring and Management (RMM) platform helps IT professionals manage
+a fleet of Devices with Services associated with them. This Web Service will
+fulfill the most basic requirements of an RMM by keeping a simple inventory of
+Devices and Services to calculate their total costs.
+
+Breakdown of Service costs by Device Type:
+
+#+caption: Services and costs
+#+name: tbl:services_cost_per_device_type
+|-----------------------|---------------|
+| Type                  | Price         |
+|-----------------------|---------------|
+| Device of any type    | $4 per device |
+| Antivirus for Windows | $5 per device |
+| Antivirus for Mac     | $7 per device |
+| Backup                | $3 per device |
+| Screen Share          | $1 per device |
+|-----------------------+---------------|
+
+Devices have the following properties:
+- Id
+- System Name
+- Type (Windows Workstation, Windows Server, Mac, etc.)
+
+
+** Requirements
+
+1. Implement a simple data model and persistence for Devices and the Services
+   associated with them.
+2. Implement endpoints and logic for the following.
+   - Add, Delete (no edits) for Devices. Duplicate Devices should not be
+     allowed.
+   - Add, Delete (no edits) for Services and their cost. Duplicate Services
+     should not be allowed.
+   - Add, Delete (no edits) for Services assigned to a Device.
+   - Calculate the total cost of the services depending on Services used by a
+     Device.
+
+     *Example*:
+     Customer with 2 Windows and 3 Macs, with the following Services:
+
+     |-------------+-----------+--------+--------------|
+     | Device Type | Antivirus | Backup | Screen Share |
+     |-------------+-----------+--------+--------------|
+     | Windows     |         2 |      1 |            2 |
+     | Mac         |         3 |      2 |            2 |
+     |-------------+-----------+--------+--------------|
+     | *Total ($)* |   *31.00* | *9.00* |       *4.00* |
+     |-------------+-----------+--------+--------------|
+     *Total Cost:* $64
+
+     Explanation:
+     |--------------+----------|
+     | Category     | Cost ($) |
+     |--------------+----------|
+     | Devices      |    20.00 |
+     | Antivirus    |    31.00 |
+     | Backup       |     9.00 |
+     | Screen share |     4.00 |
+     |--------------+----------|
+
+3. Implement a rudimentary cache for the calculation per device. Note that the
+   cache must be re-evaluated any time a service is added to a Device.
