@@ -54,3 +54,9 @@ Thumbs.db
 *.mov
 *.wmv
 
+
+# MY CONFIG.
+.project
+.settings/
+.vim/
+
