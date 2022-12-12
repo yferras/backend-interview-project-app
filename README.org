@@ -5,7 +5,7 @@
 
 * Main target
 
-Implement a REST API in Java with data persistency and caching to fulfill the
+Implement a REST API in Java with data persistence and caching to fulfill the
 basic requirements of a Remote Monitoring and Management (RMM) platform.
 
 ** Introduction
