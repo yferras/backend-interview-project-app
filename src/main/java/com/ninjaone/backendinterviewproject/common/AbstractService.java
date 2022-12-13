@@ -12,7 +12,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -33,8 +32,7 @@ public abstract class AbstractService<I extends Serializable, D extends IBusines
 
     protected final IConverter<E, D> converter;
     protected final JpaRepository<E, I> repository;
-
-
+    protected final List<DtoValidation.Group<D>> validationGroupsBeforeInsert = new ArrayList<>();
 
     /**
      * {@inheritDoc}
@@ -42,7 +40,7 @@ public abstract class AbstractService<I extends Serializable, D extends IBusines
     @Override
     @Transactional
     public D addNew(D dto) throws BusinessException {
-        validateBeforeInsert(dto, getValidationGroupsBeforeInsert());
+        validateBeforeInsert(dto, validationGroupsBeforeInsert);
         log.info("D::{} is valid!!!", converter.getDtoClass().getSimpleName());
         try {
             E entity = converter.convertToEntity(dto);
@@ -113,7 +111,6 @@ public abstract class AbstractService<I extends Serializable, D extends IBusines
         }
     }
 
-    protected abstract List<DtoValidation.Group<D>> getValidationGroupsBeforeInsert();
 
 
 }

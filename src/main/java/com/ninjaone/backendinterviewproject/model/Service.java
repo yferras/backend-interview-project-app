@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Class that represents the service.
@@ -19,11 +20,20 @@ public class Service implements IBusinessEntity<Long> {
     private Long id;
     @Column(
             unique = true,
-            length = 32,
+            length = 64,
             nullable = false
     )
     private String name;
 
     private double price;
+
+    @Column(name = "apply_to_all", nullable = false)
+    private boolean applyToAll = false;
+
+    @ManyToMany(mappedBy = "services")
+    Set<DeviceType> deviceTypes;
+
+    @ManyToMany(mappedBy = "services")
+    Set<Device> devices;
 
 }

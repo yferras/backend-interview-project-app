@@ -3,12 +3,12 @@
 #+LANGUAGE: en
 
 
-* Main target
+* Main target.
 
 Implement a REST API in Java with data persistence and caching to fulfill the
 basic requirements of a Remote Monitoring and Management (RMM) platform.
 
-** Introduction
+** Introduction.
 
 A Remote Monitoring and Management (RMM) platform helps IT professionals manage
 a fleet of Devices with Services associated with them. This Web Service will
@@ -35,7 +35,7 @@ Devices have the following properties:
 - Type (Windows Workstation, Windows Server, Mac, etc.)
 
 
-** Requirements
+** Requirements.
 
 1. Implement a simple data model and persistence for Devices and the Services
    associated with them.
@@ -62,14 +62,301 @@ Devices have the following properties:
      *Total Cost:* $64
 
      Explanation:
-     |--------------+----------|
-     | Category     | Cost ($) |
-     |--------------+----------|
-     | Devices      |    20.00 |
-     | Antivirus    |    31.00 |
-     | Backup       |     9.00 |
-     | Screen share |     4.00 |
-     |--------------+----------|
+     |--------------+---------------------------+----------|
+     | Category     | Description               | Cost ($) |
+     |--------------+---------------------------+----------|
+     | Devices      | 5 devices X 4.00          |    20.00 |
+     | Antivirus    | (2W X 5.00) + (3M X 7.00) |    31.00 |
+     | Backup       | (1W + 2M) X 3.00          |     9.00 |
+     | Screen share | (2W + 2M) X 1.00          |     4.00 |
+     |--------------+---------------------------+----------|
+     |              | *Total ($)*               |  *64.00* |
+     |--------------+---------------------------+----------|
 
 3. Implement a rudimentary cache for the calculation per device. Note that the
    cache must be re-evaluated any time a service is added to a Device.
+
+
+* Run the application.
+** Pre-requisites.
+
+Before running the application, You must be installed:
+1. JVM version 11 or above.
+2. Gradle.
+3. Git.
+4. cURL or Postman.
+
+** Clone the repository and run the application.
+
+To run the application You must clone the repository. In a terminal execute:
+
+#+begin_src bash
+
+git clone https://github.com/yferras/backend-interview-project-app.git
+
+#+end_src
+
+After cloning the repository get into the new folder:
+*backend-interview-project-app*.
+
+
+#+begin_src bash
+
+cd backend-interview-project-app
+
+#+end_src
+
+Finally, to run the application:
+
+#+begin_src bash
+
+gradle bootRun
+
+#+end_src
+
+** Endpoints.
+
+*** For Devices.
+
+You can access to this endpoint with this URL:
+
+http://localhost:8081/v1/device
+
+**** Delete device by identifier.
+
+To delete a specific device, you can use its identifier and calling the *DELETE*
+method on the endpoint. As shown below:
+
+#+begin_src bash
+curl --location --request DELETE 'http://localhost:8081/v1/device/<ID>'
+#+end_src
+
+Where ~<ID>~ is the actual identifier value.
+
+If the identifier exists in the database and the deletion process is successful,
+the status code must be *200 OK*, and nothing is printed in the terminal.
+
+Let's delete the device with identifier 1.
+
+#+begin_src bash
+$> curl --location --request DELETE 'http://localhost:8081/v1/device/1'
+$>
+#+end_src
+
+Otherwise if the identifier doesn't exists, an error message will be printed in
+the terminal. The status will be: *404 Not Found*.
+
+Let's execute the last command again.
+
+#+begin_src bash
+$> curl --location --request DELETE 'http://localhost:8081/v1/device/1'
+E::Device(ID = 1) Not found.%
+$>
+#+end_src
+
+
+**** Add new devices.
+
+For store new devices, you can use the *POST* method and describe the device's
+data in JSON format.
+
+#+begin_src bash
+curl --location --request POST 'http://localhost:8081/v1/device' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "<NAME>",
+    "deviceType": {
+        "name": "<DEVICE_TYPE_NAME>"
+    }
+}'
+#+end_src
+
+Alternatively (and also equivalent to the last command).
+
+#+begin_src bash
+curl --location --request POST 'http://localhost:8081/v1/device' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "<NAME>",
+    "deviceType": {
+        "id": "<DEVICE_TYPE_ID>"
+    }
+}'
+#+end_src
+
+Where:
+- ~<NAME>~ :: Is the name for the new device.
+- ~<DEVICE_TYPE_NAME>~ :: Is the name of the device's type.
+- ~<DEVICE_TYPE_ID>~ :: Is the device's identifier.
+
+If the insertion process is successful. The returned status will be: *201
+Created*.
+
+/Important warning./ In the JSON you can only specify one of the properties of
+~deviceType~: ~name~ or ~id~, but not both at the same time. For example
+this JSON is not allowed (even if the combination exists):
+#+begin_src json
+{
+    "name": "computer #1",
+    "deviceType": {
+        "id": "1",
+        "name": "linux"
+    }
+}
+#+end_src
+
+And if it is used, a validation error it will be sent. This behavior is to
+prevent any non-existent data combinations. See:
+
+#+begin_src bash
+$> curl --location --request POST 'http://localhost:8081/v1/device' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "computer #1",
+    "deviceType": {
+        "id": 1,
+        "name": "linux"
+    }
+}'
+{"deviceType":["only one of the fields: 'id' or 'name' must be required."],"type":"DeviceDto","value":{"id":null,"name":"computer #1","deviceType":{"id":1,"name":"linux"},"customerId":null}}%
+$>
+#+end_src
+
+Let's take a look at the returned content. The content is a JSON:
+
+#+begin_src json
+{
+  "deviceType": [
+    "only one of the fields: 'id' or 'name' must be required."
+  ],
+  "type": "DeviceDto",
+  "value": {
+    "id": null,
+    "name": "computer #1",
+    "deviceType": {
+      "id": 1,
+      "name": "linux"
+    },
+    "customerId": null
+  }
+}
+#+end_src
+
+Where:
+ - ~deviceType~ :: is an array that contains all error messages. The name of
+   this property is the name of the actual problematic field (for this example
+   the name is ~deviceType~).
+ - ~type~ :: is the name of the actual DTO supplied
+ - ~value~ :: is the suplied object.
+
+Also, if the correct format is used, the existence of the given data will be
+checked against the database; if not exist a *404 Not Found* (e.g.: the supplied
+values for: ~<DEVICE_TYPE_ID>~ or ~<DEVICE_TYPE_NAME>~ are not present in the
+database). In the response additionally comes the valid combinations that you
+can use to fix the problem. See:
+
+#+begin_src bash
+$> curl --location --request POST 'http://localhost:8081/v1/device' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "computer #1",
+    "deviceType": {
+        "id": -100
+    }
+}'
+E::DeviceType(id = -100) Not found. Valid combinations are: DeviceType(id = 4, name = "android") or DeviceType(id = 1, name = "linux") or DeviceType(id = 2, name = "mac") or DeviceType(id = 3, name = "windows")%
+$>
+#+end_src
+
+The same happens if you provied a non-existent value for ~name~.
+
+#+begin_src bash
+$> curl --location --request POST 'http://localhost:8081/v1/device' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "computer #1",
+    "deviceType": {
+        "name": "bsd"
+    }
+}'
+E::DeviceType(name = "bsd") Not found. Valid combinations are: DeviceType(id = 4, name = "android") or DeviceType(id = 1, name = "linux") or DeviceType(id = 2, name = "mac") or DeviceType(id = 3, name = "windows")
+$>
+#+end_src
+
+Other validations performed:
+
+- ~deviceType~ cannot be null. The status returned in these cases is: *422
+  Unprocessable Entity*.
+  #+begin_src bash
+$> curl --location --request POST 'http://localhost:8081/v1/device' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "computer #1"
+}'
+{"deviceType":["cannot be null."],"type":"DeviceDto","value":{"id":null,"name":"computer #1","deviceType":null,"customerId":null}}%
+$>
+  #+end_src
+
+- ~name~ cannot be neither null, neither empty nor blank string. The status
+  returned in these cases is: *422 Unprocessable Entity*.
+  - Null value:
+    #+begin_src bash
+$>curl --location --request POST 'http://localhost:8081/v1/device' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": null,
+    "deviceType": {
+        "name": "linux"
+    }
+}'
+{"name":["cannot be null."],"type":"DeviceDto","value":{"id":null,"name":null,"deviceType":{"id":null,"name":"linux"},"customerId":null}}%
+$>
+    #+end_src
+
+  - Empty string:
+    #+begin_src bash
+$> curl --location --request POST 'http://localhost:8081/v1/device' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "",
+    "deviceType": {
+        "name": "linux"
+    }
+}'
+{"name":["cannot be an empty string."],"type":"DeviceDto","value":{"id":null,"name":"","deviceType":{"id":null,"name":"linux"},"customerId":null}}%
+$>
+    #+end_src
+
+  - Blank string:
+    #+begin_src bash
+$> curl --location --request POST 'http://localhost:8081/v1/device' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "    ",
+    "deviceType": {
+        "name": "linux"
+    }
+}'
+{"name":["cannot be an empty string."],"type":"DeviceDto","value":{"id":null,"name":"    ","deviceType":{"id":null,"name":"linux"},"customerId":null}}%
+$>
+    #+end_src
+
+- The device name is unique in the database. Let's use a name that has already been used.
+  #+begin_src bash
+$> curl --location --request POST 'http://localhost:8081/v1/device' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Mac - 1",
+    "deviceType": {
+        "name": "linux"
+    }
+}'
+Data duplication [Device].%
+$>
+  #+end_src
+
+  In theses cases the status returned is: *409 Conflicted*.
+
+
+
+#  LocalWords:  DTO JVM cURL Gradle Unprocessable JSON RMM

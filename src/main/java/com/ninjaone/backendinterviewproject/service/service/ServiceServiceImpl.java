@@ -1,20 +1,15 @@
 package com.ninjaone.backendinterviewproject.service.service;
 
 import com.ninjaone.backendinterviewproject.common.AbstractService;
-import com.ninjaone.backendinterviewproject.common.validation.DtoValidation;
 import com.ninjaone.backendinterviewproject.common.converter.IConverter;
+import com.ninjaone.backendinterviewproject.common.validation.DtoValidation;
 import com.ninjaone.backendinterviewproject.dto.ServiceDto;
 import com.ninjaone.backendinterviewproject.model.Service;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @org.springframework.stereotype.Service
 public class ServiceServiceImpl extends AbstractService<Long, ServiceDto, Service> implements IServiceService {
-
-    private final List<DtoValidation.Group<ServiceDto>> validationGroupsBeforeInsert = new ArrayList<>();
 
     public ServiceServiceImpl(
             @Qualifier("serviceConverter") IConverter<Service, ServiceDto> converter,
@@ -56,8 +51,4 @@ public class ServiceServiceImpl extends AbstractService<Long, ServiceDto, Servic
         validationGroupsBeforeInsert.add(priceFieldValGroup);
     }
 
-    @Override
-    protected List<DtoValidation.Group<ServiceDto>> getValidationGroupsBeforeInsert() {
-        return validationGroupsBeforeInsert;
-    }
 }

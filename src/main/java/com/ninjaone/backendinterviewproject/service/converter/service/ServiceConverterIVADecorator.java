@@ -16,7 +16,7 @@ public class ServiceConverterIVADecorator extends AbstractConverterDecorator<Ser
     @Value("${app.service.decorator-config.iva-dec.value:0}")
     private double iva;
 
-    protected ServiceConverterIVADecorator() {
+    public ServiceConverterIVADecorator() {
         super(NAME);
     }
 

@@ -60,3 +60,5 @@ Thumbs.db
 .settings/
 .vim/
 
+/bin/
+/.classpath
