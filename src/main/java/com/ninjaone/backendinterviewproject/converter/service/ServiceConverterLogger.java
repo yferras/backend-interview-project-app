@@ -1,4 +1,4 @@
-package com.ninjaone.backendinterviewproject.service.converter.service;
+package com.ninjaone.backendinterviewproject.converter.service;
 
 import com.ninjaone.backendinterviewproject.common.converter.ConverterLogDecorator;
 import com.ninjaone.backendinterviewproject.dto.ServiceDto;

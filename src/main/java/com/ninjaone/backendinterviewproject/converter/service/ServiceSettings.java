@@ -1,4 +1,4 @@
-package com.ninjaone.backendinterviewproject.service.converter.service;
+package com.ninjaone.backendinterviewproject.converter.service;
 
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
