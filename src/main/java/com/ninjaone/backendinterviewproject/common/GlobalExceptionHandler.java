@@ -5,7 +5,6 @@ import com.ninjaone.backendinterviewproject.common.exception.NoDataException;
 import com.ninjaone.backendinterviewproject.common.exception.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -14,14 +13,6 @@ import java.util.Map;
 
 @Slf4j
 public class GlobalExceptionHandler {
-
-    public static final String NPE = "NPE!!!";
-
-    @ExceptionHandler(value = NullPointerException.class)
-    public ResponseEntity<String> onNullPointerException(NullPointerException exception) {
-        log.error(NPE, exception);
-        return new ResponseEntity<>(NPE, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
     @ExceptionHandler(value = DuplicatedValueException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
