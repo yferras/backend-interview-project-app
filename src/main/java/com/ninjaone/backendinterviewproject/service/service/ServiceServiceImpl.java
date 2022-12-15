@@ -28,7 +28,7 @@ public class ServiceServiceImpl extends AbstractService<Long, ServiceDto, Servic
         fieldNameValGroup.addValidation(
                 new DtoValidation<>(
                         serviceDto -> serviceDto.getName().isBlank(),
-                        "cannot be empty string."
+                        "cannot be an empty string."
                 )
         );
 

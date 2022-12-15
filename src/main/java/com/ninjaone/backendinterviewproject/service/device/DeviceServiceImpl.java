@@ -49,7 +49,7 @@ public class DeviceServiceImpl extends AbstractService<Long, DeviceDto, Device> 
                                     && !deviceDto.getDeviceType().getName().isBlank();
                             return idDef == nameDef;
                         },
-                        "only one of the fields: 'id' or 'name' must be required."
+                        "only one of the fields: 'id' or 'name' is required."
                 )
         );
 
