@@ -2,7 +2,6 @@ package com.ninjaone.backendinterviewproject.service.device;
 
 import com.ninjaone.backendinterviewproject.common.AbstractService;
 import com.ninjaone.backendinterviewproject.common.converter.IConverter;
-import com.ninjaone.backendinterviewproject.common.exception.BusinessException;
 import com.ninjaone.backendinterviewproject.common.validation.DtoValidation;
 import com.ninjaone.backendinterviewproject.dto.DeviceDto;
 import com.ninjaone.backendinterviewproject.model.Device;
@@ -57,8 +56,4 @@ public class DeviceServiceImpl extends AbstractService<Long, DeviceDto, Device> 
         validationGroupsBeforeInsert.add(typeFieldValGroup);
     }
 
-    @Override
-    public DeviceDto addNew(DeviceDto dto) throws BusinessException {
-        return super.addNew(dto);
-    }
 }

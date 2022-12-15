@@ -47,3 +47,23 @@ VALUES
     (default, 'Windows - 1', 0, SELECT ID FROM DEVICE_TYPE WHERE NAME = 'windows'), -- Windows(3)  -- ID = 4
     (default, 'Windows - 2', 0, SELECT ID FROM DEVICE_TYPE WHERE NAME = 'windows'); -- Windows(3)  -- ID = 5
 
+--INSERT INTO
+--    SERVICE_IN_DEVICE(DEVICE_ID, SERVICE_ID)
+--VALUES
+--    (1, SELECT ID FROM SERVICE WHERE NAME = 'Antivirus for Mac'),
+--    (1, SELECT ID FROM SERVICE WHERE NAME = 'Backup'),
+--    (1, SELECT ID FROM SERVICE WHERE NAME = 'Screen Share'),
+--
+--    (2, SELECT ID FROM SERVICE WHERE NAME = 'Antivirus for Mac'),
+--    (2, SELECT ID FROM SERVICE WHERE NAME = 'Backup'),
+--
+--    (3, SELECT ID FROM SERVICE WHERE NAME = 'Antivirus for Mac'),
+--    (3, SELECT ID FROM SERVICE WHERE NAME = 'Screen Share'),
+--
+--    (4, SELECT ID FROM SERVICE WHERE NAME = 'Antivirus for Windows'),
+--    (4, SELECT ID FROM SERVICE WHERE NAME = 'Backup'),
+--    (4, SELECT ID FROM SERVICE WHERE NAME = 'Screen Share'),
+--
+--    (5, SELECT ID FROM SERVICE WHERE NAME = 'Antivirus for Windows'),
+--    (5, SELECT ID FROM SERVICE WHERE NAME = 'Screen Share')
+-- ;
