@@ -47,9 +47,8 @@ public abstract class AbstractService<I extends Serializable, D extends IBusines
             E entity = converter.convertToEntity(dto);
             entity.setId(null); // Only inserts; no modify.
             entity = repository.save(entity);
-            D newDto = converter.convertToDto(entity);
             log.info("New E::{} was inserted: ID({})", converter.getEntityClass().getSimpleName(), entity.getId());
-            return newDto;
+            return converter.convertToDto(entity);
         } catch (DataIntegrityViolationException e) {
             // converter has the entity class.
             throw new DuplicatedValueException(converter.getEntityClass(), e);

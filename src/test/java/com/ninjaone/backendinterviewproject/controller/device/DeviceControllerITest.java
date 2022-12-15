@@ -1,7 +1,6 @@
 package com.ninjaone.backendinterviewproject.controller.device;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ninjaone.backendinterviewproject.controller.AbstractControllerITest;
 import com.ninjaone.backendinterviewproject.controller.AbstractEntityControllerITest;
 import com.ninjaone.backendinterviewproject.dto.DeviceDto;
 import com.ninjaone.backendinterviewproject.dto.DeviceTypeDto;
@@ -13,14 +12,10 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.text.MessageFormat;
 import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -22,8 +22,3 @@ app:
   service:
     apply-decorators:
       - logger-dec
-#      - iva-dec
-
-    decorator-config:
-      iva-dec:
-        value: 0.12

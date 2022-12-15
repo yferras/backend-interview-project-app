@@ -11,11 +11,4 @@ public class BusinessException extends Exception {
         super(DEF_MESSAGE, e);
     }
 
-    public BusinessException(String message) {
-        super(message);
-    }
-
-    public BusinessException(String message, Exception e) {
-        super(message, e);
-    }
 }
