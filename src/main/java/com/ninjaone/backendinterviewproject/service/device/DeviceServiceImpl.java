@@ -57,8 +57,4 @@ public class DeviceServiceImpl extends AbstractService<Long, DeviceDto, Device> 
         validationGroupsBeforeInsert.add(typeFieldValGroup);
     }
 
-    @Override
-    public DeviceDto addNew(DeviceDto dto) throws BusinessException {
-        return super.addNew(dto);
-    }
 }
