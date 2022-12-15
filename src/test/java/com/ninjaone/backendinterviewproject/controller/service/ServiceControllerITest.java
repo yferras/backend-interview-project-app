@@ -2,6 +2,7 @@ package com.ninjaone.backendinterviewproject.controller.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ninjaone.backendinterviewproject.controller.AbstractControllerITest;
+import com.ninjaone.backendinterviewproject.controller.AbstractEntityControllerITest;
 import com.ninjaone.backendinterviewproject.dto.ServiceDto;
 import com.ninjaone.backendinterviewproject.service.service.IServiceService;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-class ServiceControllerITest extends AbstractControllerITest<Long, ServiceDto> {
+class ServiceControllerITest extends AbstractEntityControllerITest<Long, ServiceDto> {
 
     @Autowired
     public ServiceControllerITest(

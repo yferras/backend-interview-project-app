@@ -3,8 +3,6 @@ package com.ninjaone.backendinterviewproject.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ninjaone.backendinterviewproject.BackendInterviewProjectApplication;
-import com.ninjaone.backendinterviewproject.common.IBusinessDto;
-import com.ninjaone.backendinterviewproject.common.IService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,9 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 @AutoConfigureMockMvc
 @AllArgsConstructor
-public abstract class AbstractControllerITest<I extends Serializable, D extends IBusinessDto> {
+public abstract class AbstractControllerITest {
 
     /**
      * Pattern description.
@@ -44,8 +40,6 @@ public abstract class AbstractControllerITest<I extends Serializable, D extends 
     protected MockMvc mockMvc;
 
     protected ObjectMapper objectMapper;
-
-    protected IService<I, D> service;
 
 
     /**

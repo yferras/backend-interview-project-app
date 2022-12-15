@@ -1,4 +1,4 @@
-package com.ninjaone.backendinterviewproject.service.converter.device;
+package com.ninjaone.backendinterviewproject.converter.device;
 
 import com.ninjaone.backendinterviewproject.common.converter.AbstractConverter;
 import com.ninjaone.backendinterviewproject.common.exception.NoDataException;

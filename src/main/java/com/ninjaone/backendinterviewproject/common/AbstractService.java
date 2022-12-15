@@ -4,7 +4,6 @@ import com.ninjaone.backendinterviewproject.common.converter.IConverter;
 import com.ninjaone.backendinterviewproject.common.exception.BusinessException;
 import com.ninjaone.backendinterviewproject.common.exception.DuplicatedValueException;
 import com.ninjaone.backendinterviewproject.common.exception.NoDataException;
-import com.ninjaone.backendinterviewproject.common.exception.ValidationException;
 import com.ninjaone.backendinterviewproject.common.validation.DtoValidation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -40,7 +41,7 @@ public abstract class AbstractService<I extends Serializable, D extends IBusines
     @Override
     @Transactional
     public D addNew(D dto) throws BusinessException {
-        validateBeforeInsert(dto, validationGroupsBeforeInsert);
+        DtoValidation.checkGroups(dto, validationGroupsBeforeInsert);
         log.info("D::{} is valid!!!", converter.getDtoClass().getSimpleName());
         try {
             E entity = converter.convertToEntity(dto);
@@ -83,34 +84,6 @@ public abstract class AbstractService<I extends Serializable, D extends IBusines
     public Optional<D> getById(I id) {
         return repository.findById(id).map(converter::convertToDto);
     }
-
-    private void validateBeforeInsert(D dto, List<DtoValidation.Group<D>> validationGroups) throws ValidationException {
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("type", converter.getDtoClass().getSimpleName());
-        map.put("value", dto);
-        boolean isInvalid = false;
-        for (DtoValidation.Group<D> group : validationGroups) {
-            List<String> validationMessages = new ArrayList<>(0);
-            for (DtoValidation<D> validation : group) {
-                if (validation.testCondition(dto)) {
-                    validationMessages.add(validation.getMessage());
-                    isInvalid = true;
-                    if (!validation.evalNext()) {
-                        break;
-                    }
-                }
-            }
-
-            if (!validationMessages.isEmpty()) {
-                map.put(group.getName(), validationMessages);
-            }
-        }
-        if (isInvalid) {
-            throw new ValidationException(map);
-        }
-    }
-
 
 
 }
