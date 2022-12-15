@@ -1,7 +1,6 @@
 package com.ninjaone.backendinterviewproject.controller.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ninjaone.backendinterviewproject.controller.AbstractControllerITest;
 import com.ninjaone.backendinterviewproject.controller.AbstractEntityControllerITest;
 import com.ninjaone.backendinterviewproject.dto.ServiceDto;
 import com.ninjaone.backendinterviewproject.service.service.IServiceService;

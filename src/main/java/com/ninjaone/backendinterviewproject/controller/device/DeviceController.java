@@ -2,7 +2,6 @@ package com.ninjaone.backendinterviewproject.controller.device;
 
 import com.ninjaone.backendinterviewproject.common.exception.BusinessException;
 import com.ninjaone.backendinterviewproject.dto.DeviceDto;
-import com.ninjaone.backendinterviewproject.dto.ServiceDto;
 import com.ninjaone.backendinterviewproject.service.device.IDeviceService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
