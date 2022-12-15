@@ -2,6 +2,7 @@ package com.ninjaone.backendinterviewproject.controller.device;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ninjaone.backendinterviewproject.controller.AbstractControllerITest;
+import com.ninjaone.backendinterviewproject.controller.AbstractEntityControllerITest;
 import com.ninjaone.backendinterviewproject.dto.DeviceDto;
 import com.ninjaone.backendinterviewproject.dto.DeviceTypeDto;
 import com.ninjaone.backendinterviewproject.service.device.IDeviceService;
@@ -28,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-class DeviceControllerITest extends AbstractControllerITest<Long, DeviceDto> {
+class DeviceControllerITest extends AbstractEntityControllerITest<Long, DeviceDto> {
 
     @Autowired
     public DeviceControllerITest(
