@@ -7,13 +7,15 @@ import com.ninjaone.backendinterviewproject.dto.reports.TotalCostPerUser;
 import com.ninjaone.backendinterviewproject.model.Service;
 import com.ninjaone.backendinterviewproject.model.reports.TotalDevicesPerServiceByUserReport;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Set;
 
-@org.springframework.stereotype.Service
+@org.springframework.stereotype.Service("reportDefaultService")
 @AllArgsConstructor
+@Slf4j
 public class ReportServiceImpl implements IReportService {
 
     private final DeviceRepository deviceRepository;
@@ -46,7 +48,10 @@ public class ReportServiceImpl implements IReportService {
         for (Service defaultService : defaultServices) {
             totalCost += defaultService.getPrice() * totalDevicesPerUser;
         }
-
+        log.info("Total cost for User(id = {}): ${}",
+                userId,
+                totalCost
+        );
         return new TotalCostPerUser(totalCost);
     }
 }

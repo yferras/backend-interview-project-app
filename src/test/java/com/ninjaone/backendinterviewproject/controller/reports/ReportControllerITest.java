@@ -11,6 +11,7 @@ import com.ninjaone.backendinterviewproject.service.device.IDeviceService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -35,6 +36,11 @@ class ReportControllerITest extends AbstractControllerITest {
     private final IConfigServiceDeviceRelService configServiceDeviceRelService;
     private final IDeviceService deviceService;
 
+    @Value("${app.params.iva}")
+    private double iva;
+    @Value("${app.params.include-iva}")
+    private boolean includeIva;
+
     @Autowired
     public ReportControllerITest(MockMvc mockMvc, ObjectMapper objectMapper, IConfigServiceDeviceRelService service, IDeviceService deviceService) {
         super(mockMvc, objectMapper);
@@ -47,7 +53,8 @@ class ReportControllerITest extends AbstractControllerITest {
     void calcTotalCost() throws Exception {
 
         createDevices();
-
+        double expectedCostBeforeConfig = 20.0;
+        expectedCostBeforeConfig *= includeIva ? (1.0 + iva) : 1.0;
         mockMvc.perform(
                         get("/v1/reports/total-per-customer/{id}", CUSTOMER_ID)
                 )
@@ -55,11 +62,12 @@ class ReportControllerITest extends AbstractControllerITest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.value").exists())
                 .andExpect(jsonPath("$.value").isNumber())
-                .andExpect(jsonPath("$.value").value(20))
+                .andExpect(jsonPath("$.value").value(expectedCostBeforeConfig))
         ;
 
         configServicesInDevices();
-
+        double expectedCostAfterConfig = 64.0;
+        expectedCostAfterConfig *= includeIva ? (1.0 + iva) : 1.0;
         mockMvc.perform(
                         get("/v1/reports/total-per-customer/{id}", CUSTOMER_ID)
                 )
@@ -67,7 +75,7 @@ class ReportControllerITest extends AbstractControllerITest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.value").exists())
                 .andExpect(jsonPath("$.value").isNumber())
-                .andExpect(jsonPath("$.value").value(64))
+                .andExpect(jsonPath("$.value").value(expectedCostAfterConfig))
         ;
 
     }
