@@ -3,7 +3,8 @@ package com.ninjaone.backendinterviewproject.service.config;
 import com.ninjaone.backendinterviewproject.common.exception.BusinessRuntimeException;
 import com.ninjaone.backendinterviewproject.common.exception.IllegalDataCombinationException;
 import com.ninjaone.backendinterviewproject.common.exception.NoDataException;
-import com.ninjaone.backendinterviewproject.common.validation.DtoValidation;
+import com.ninjaone.backendinterviewproject.common.validation.IGroupValidation;
+import com.ninjaone.backendinterviewproject.common.validation.IValidation;
 import com.ninjaone.backendinterviewproject.database.device.DeviceRepository;
 import com.ninjaone.backendinterviewproject.database.service.ServiceRepository;
 import com.ninjaone.backendinterviewproject.dto.ConfigServiceDeviceRelDto;
@@ -34,7 +35,7 @@ public class ConfigServiceDeviceRelImpl implements IConfigServiceDeviceRelServic
 
     private final ServiceRepository serviceRepository;
 
-    private final List<DtoValidation.Group<ConfigServiceDeviceRelDto>> validationGroupsBeforeInsert = new ArrayList<>();
+    private final List<IGroupValidation<ConfigServiceDeviceRelDto>> validationGroupsBeforeInsert = new ArrayList<>();
 
     public ConfigServiceDeviceRelImpl(DeviceRepository deviceRepository, ServiceRepository serviceRepository) {
         this.deviceRepository = deviceRepository;
@@ -43,79 +44,88 @@ public class ConfigServiceDeviceRelImpl implements IConfigServiceDeviceRelServic
         validationGroupsBeforeInsert.add(getValidationsForServiceField());
     }
 
-    private static DtoValidation.Group<ConfigServiceDeviceRelDto> getValidationsForServiceField() {
-        DtoValidation.Group<ConfigServiceDeviceRelDto> serviceGroup = new DtoValidation.Group<>("service");
-        serviceGroup.addValidation(new DtoValidation<>(
-                dto -> dto.getService() == null,
-                "cannot be null.",
-                false
-        ));
-        // Checks for valid type: String
-        serviceGroup.addValidation(new DtoValidation<>(
-                dto -> {
-                    if (dto.getService() instanceof String) {
-                        String device = (String) dto.getService();
-                        dto.setServiceType(String.class);
-                        return device.isBlank();
-                    }
-                    return false;
-                },
-                CANNOT_BE_AN_EMPTY_STRING_VAL_MESSAGE,
-                false
-        ));
-        // Checks for valid type: Number
-        serviceGroup.addValidation(new DtoValidation<>(
-                dto -> {
-                    if (dto.getServiceType() != null) {
-                        return false;
-                    }
-                    if (dto.getService() instanceof Number) {
-                        dto.setServiceType(Number.class);
-                        return false;
-                    }
-                    return true;
-                },
-                INVALID_TYPE_VAL_MESSAGE
-        ));
+    private static IGroupValidation<ConfigServiceDeviceRelDto> getValidationsForServiceField() {
+        IGroupValidation<ConfigServiceDeviceRelDto> serviceGroup = IGroupValidation.of("service", true);
+        serviceGroup
+                .addValidation(
+                        IValidation.requireNonNull(
+                                ConfigServiceDeviceRelDto::getService,
+                                "cannot be null.",
+                                false
+                        )
+                )
+                .addValidation(
+                        IValidation.of(
+                                configRelDto -> { // Checks for valid type: String
+                                    if (configRelDto.getService() instanceof String) {
+                                        String device = (String) configRelDto.getService();
+                                        configRelDto.setServiceType(String.class);
+                                        return device.isBlank();
+                                    }
+                                    return false;
+                                },
+                                CANNOT_BE_AN_EMPTY_STRING_VAL_MESSAGE,
+                                false
+                        )
+                )
+                .addValidation(
+                        IValidation.of(
+                                configRelDto -> { // Checks for valid type: Number
+                                    if (configRelDto.getServiceType() != null) {
+                                        return false;
+                                    }
+                                    if (configRelDto.getService() instanceof Number) {
+                                        configRelDto.setServiceType(Number.class);
+                                        return false;
+                                    }
+                                    return true;
+                                },
+                                INVALID_TYPE_VAL_MESSAGE,
+                                false
+                        )
+                );
 
         return serviceGroup;
     }
 
-    private static DtoValidation.Group<ConfigServiceDeviceRelDto> getValidationsForDeviceField() {
-        DtoValidation.Group<ConfigServiceDeviceRelDto> deviceGroup = new DtoValidation.Group<>("device");
-        deviceGroup.addValidation(new DtoValidation<>(
-                dto -> dto.getDevice() == null,
-                "cannot be null.",
-                false
-        ));
-
-        // Checks for valid type: String
-        deviceGroup.addValidation(new DtoValidation<>(
-                dto -> {
-                    if (dto.getDevice() instanceof String) {
-                        String device = (String) dto.getDevice();
-                        dto.setDeviceType(String.class);
-                        return device.isBlank();
-                    }
-                    return false;
-                },
-                CANNOT_BE_AN_EMPTY_STRING_VAL_MESSAGE,
-                false
-        ));
-        // Checks for valid type: Number
-        deviceGroup.addValidation(new DtoValidation<>(
-                dto -> {
-                    if (dto.getDeviceType() != null) {
-                        return false;
-                    }
-                    if (dto.getDevice() instanceof Number) {
-                        dto.setDeviceType(Number.class);
-                        return false;
-                    }
-                    return true;
-                },
-                INVALID_TYPE_VAL_MESSAGE
-        ));
+    private static IGroupValidation<ConfigServiceDeviceRelDto> getValidationsForDeviceField() {
+        IGroupValidation<ConfigServiceDeviceRelDto> deviceGroup = IGroupValidation.of("device", true);
+        deviceGroup
+                .addValidation(
+                        IValidation.requireNonNull(
+                                ConfigServiceDeviceRelDto::getDevice,
+                                "cannot be null.",
+                                false
+                        )
+                ).addValidation(
+                        IValidation.of(
+                                configRelDto -> { // Checks for valid type: String
+                                    if (configRelDto.getDevice() instanceof String) {
+                                        String device = (String) configRelDto.getDevice();
+                                        configRelDto.setDeviceType(String.class);
+                                        return device.isBlank();
+                                    }
+                                    return false;
+                                },
+                                CANNOT_BE_AN_EMPTY_STRING_VAL_MESSAGE,
+                                false
+                        )
+                ).addValidation(
+                        IValidation.of(
+                                configRelDto -> { //Checks for valid type:Number
+                                    if (configRelDto.getDeviceType() != null) {
+                                        return false;
+                                    }
+                                    if (configRelDto.getDevice() instanceof Number) {
+                                        configRelDto.setDeviceType(Number.class);
+                                        return false;
+                                    }
+                                    return true;
+                                },
+                                INVALID_TYPE_VAL_MESSAGE,
+                                false
+                        )
+                );
 
         return deviceGroup;
     }
@@ -138,7 +148,7 @@ public class ConfigServiceDeviceRelImpl implements IConfigServiceDeviceRelServic
 
     private void configRelationship(ConfigServiceDeviceRelDto configServiceDevice, boolean enable) {
         configServiceDevice.setEnabled(null);
-        DtoValidation.checkGroups(configServiceDevice, validationGroupsBeforeInsert);
+        IGroupValidation.checkGroups(configServiceDevice, validationGroupsBeforeInsert);
         log.info("Validation complete!!!");
         Result<Device> deviceResult = getDevice(configServiceDevice);
         Result<Service> serviceResult = getService(configServiceDevice);

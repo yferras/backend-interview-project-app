@@ -2,7 +2,8 @@ package com.ninjaone.backendinterviewproject.service.service;
 
 import com.ninjaone.backendinterviewproject.common.AbstractService;
 import com.ninjaone.backendinterviewproject.common.converter.IConverter;
-import com.ninjaone.backendinterviewproject.common.validation.DtoValidation;
+import com.ninjaone.backendinterviewproject.common.validation.IGroupValidation;
+import com.ninjaone.backendinterviewproject.common.validation.IValidation;
 import com.ninjaone.backendinterviewproject.dto.ServiceDto;
 import com.ninjaone.backendinterviewproject.model.Service;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,35 +18,39 @@ public class ServiceServiceImpl extends AbstractService<Long, ServiceDto, Servic
     ) {
         super(converter, repository);
 
-        DtoValidation.Group<ServiceDto> fieldNameValGroup = new DtoValidation.Group<>("name");
-        fieldNameValGroup.addValidation(
-                new DtoValidation<>(
-                        serviceDto -> serviceDto.getName() == null,
-                        "cannot be null.",
-                        false
+        IGroupValidation<ServiceDto> fieldNameValGroup = IGroupValidation.of("name", true);
+        fieldNameValGroup
+                .addValidation(
+                        IValidation.requireNonNull(
+                                ServiceDto::getName,
+                                "cannot be null.",
+                                false
+                        )
                 )
-        );
-        fieldNameValGroup.addValidation(
-                new DtoValidation<>(
-                        serviceDto -> serviceDto.getName().isBlank(),
-                        "cannot be an empty string."
+                .addValidation(
+                        IValidation.requireNonBlank(
+                                ServiceDto::getName,
+                                "cannot be an empty or blank string.",
+                                true
+                        )
+                );
+        IGroupValidation<ServiceDto> priceFieldValGroup = IGroupValidation.of("price", true);
+        priceFieldValGroup
+                .addValidation(
+                        IValidation.requireNonNull(
+                                ServiceDto::getPrice,
+                                "cannot be null.",
+                                false
+                        )
                 )
-        );
-
-        DtoValidation.Group<ServiceDto> priceFieldValGroup = new DtoValidation.Group<>("price");
-        priceFieldValGroup.addValidation(
-                new DtoValidation<>(
-                        serviceDto -> serviceDto.getPrice() == null,
-                        "cannot be null.",
-                        false
-                )
-        );
-        priceFieldValGroup.addValidation(
-                new DtoValidation<>(
-                        serviceDto -> serviceDto.getPrice() < 0.0,
-                        "cannot be less than 0.0."
-                )
-        );
+                .addValidation(
+                        IValidation.of(
+                                ServiceDto::getPrice,
+                                price -> price <  0.0,
+                                "cannot be less than 0.0.",
+                                false
+                        )
+                );
 
         validationGroupsBeforeInsert.add(fieldNameValGroup);
         validationGroupsBeforeInsert.add(priceFieldValGroup);

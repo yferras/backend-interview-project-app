@@ -4,7 +4,7 @@ import com.ninjaone.backendinterviewproject.common.converter.IConverter;
 import com.ninjaone.backendinterviewproject.common.exception.BusinessException;
 import com.ninjaone.backendinterviewproject.common.exception.DuplicatedValueException;
 import com.ninjaone.backendinterviewproject.common.exception.NoDataException;
-import com.ninjaone.backendinterviewproject.common.validation.DtoValidation;
+import com.ninjaone.backendinterviewproject.common.validation.IGroupValidation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,7 +33,7 @@ public abstract class AbstractService<I extends Serializable, D extends IBusines
 
     protected final IConverter<E, D> converter;
     protected final JpaRepository<E, I> repository;
-    protected final List<DtoValidation.Group<D>> validationGroupsBeforeInsert = new ArrayList<>();
+    protected final List<IGroupValidation<D>> validationGroupsBeforeInsert = new ArrayList<>();
 
     /**
      * {@inheritDoc}
@@ -41,7 +41,7 @@ public abstract class AbstractService<I extends Serializable, D extends IBusines
     @Override
     @Transactional
     public D addNew(D dto) throws BusinessException {
-        DtoValidation.checkGroups(dto, validationGroupsBeforeInsert);
+        IGroupValidation.checkGroups(dto, validationGroupsBeforeInsert);
         log.info("D::{} is valid!!!", converter.getDtoClass().getSimpleName());
         try {
             E entity = converter.convertToEntity(dto);

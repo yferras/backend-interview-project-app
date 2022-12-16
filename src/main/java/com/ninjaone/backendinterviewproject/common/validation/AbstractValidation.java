@@ -1,37 +1,26 @@
 package com.ninjaone.backendinterviewproject.common.validation;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
-import java.util.function.Predicate;
-
-/**
- * Top abstraction for validation API.
- *
- * @param <T> any type.
- */
-@AllArgsConstructor
 public abstract class AbstractValidation<T> implements IValidation<T> {
-    private final Predicate<T> condition;
+
+    @Accessors(fluent = true)
+    @Getter
+    protected final boolean evalNext;
 
     @Getter
-    private final String message;
-
-    private final boolean evalNext;
+    protected String message;
 
     /**
-     * {@inheritDoc}
+     * Constructor.
+     *
+     * @param evalNext if the next validation will be evaluated (<code>evalNext = true</code>) or not
+     *                 (<code>evalNext = false</code>) if in this group at least one validation is {@code true}.
      */
-    @Override
-    public boolean testCondition(T dto) {
-        return condition.test(dto);
+    protected AbstractValidation(boolean evalNext) {
+        this.evalNext = evalNext;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean evalNext() {
-        return evalNext;
-    }
+
 }
