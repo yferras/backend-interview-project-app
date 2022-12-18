@@ -357,6 +357,30 @@ $>
 
   In theses cases the status returned is: *409 Conflicted*.
 
+**** Service.
+
+
+**** Add services to devices.
+You can create a relationship between service and device using this endpoint:
+
+Http://localhost:8081/v1/config 
+
+{
+ "device": <"device_name">|<device_id>,
+ "service": <"service_name">|<service_id>
+}
+
+Any combination between the values is allowed. 
+
+POST: creates a relationship between service and device.
+DELETE: removes the relationship.
+
+TO-DO
+
+**** Total cost per customer.
+TO-DO 
+**** Using the caches.
+TO-DO 
 
 
 #  LocalWords:  DTO JVM cURL Gradle Unprocessable JSON RMM
