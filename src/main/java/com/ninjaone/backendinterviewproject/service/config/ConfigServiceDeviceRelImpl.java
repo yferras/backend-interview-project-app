@@ -10,6 +10,9 @@ import com.ninjaone.backendinterviewproject.database.service.ServiceRepository;
 import com.ninjaone.backendinterviewproject.dto.ConfigServiceDeviceRelDto;
 import com.ninjaone.backendinterviewproject.model.Device;
 import com.ninjaone.backendinterviewproject.model.Service;
+import com.ninjaone.backendinterviewproject.model.reports.DeviceReport;
+import com.ninjaone.backendinterviewproject.model.reports.IDeviceReport;
+import com.ninjaone.backendinterviewproject.service.device.IDeviceCacheService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -37,9 +40,19 @@ public class ConfigServiceDeviceRelImpl implements IConfigServiceDeviceRelServic
 
     private final List<IGroupValidation<ConfigServiceDeviceRelDto>> validationGroupsBeforeInsert = new ArrayList<>();
 
-    public ConfigServiceDeviceRelImpl(DeviceRepository deviceRepository, ServiceRepository serviceRepository) {
+    private final IDeviceCacheService<Long, IDeviceReport> devicePreloadCacheService;
+    private final IDeviceCacheService<String, IDeviceReport> deviceOnDemandCacheService;
+
+    public ConfigServiceDeviceRelImpl(
+            DeviceRepository deviceRepository,
+            ServiceRepository serviceRepository,
+            IDeviceCacheService<Long, IDeviceReport> devicePreloadCacheService,
+            IDeviceCacheService<String, IDeviceReport> deviceOnDemandCacheService
+    ) {
         this.deviceRepository = deviceRepository;
         this.serviceRepository = serviceRepository;
+        this.devicePreloadCacheService = devicePreloadCacheService;
+        this.deviceOnDemandCacheService = deviceOnDemandCacheService;
         validationGroupsBeforeInsert.add(getValidationsForDeviceField());
         validationGroupsBeforeInsert.add(getValidationsForServiceField());
     }
@@ -158,12 +171,26 @@ public class ConfigServiceDeviceRelImpl implements IConfigServiceDeviceRelServic
         Device device = deviceResult.getEntity();
         Service service = serviceResult.getEntity();
 
+        int sign;
         if (enable) {
             create(device, service);
+            sign = 1;
         } else {
             device.getServices().remove(service);
+            sign = -1;
         }
+        updateCache(device, service.getPrice() * sign);
         configServiceDevice.setEnabled(enable);
+    }
+
+    private void updateCache(Device device, double price) {
+        IDeviceReport deviceReport = devicePreloadCacheService.get(device.getId());
+        DeviceReport editable = new DeviceReport();
+        editable.setDeviceId(device.getId());
+        editable.setDeviceName(device.getName());
+        editable.setCurrentCost(deviceReport.getCurrentCost() + price);
+        devicePreloadCacheService.put(device.getId(), editable);
+        deviceOnDemandCacheService.delete(device.getName());
     }
 
     private static void create(Device device, Service service) {
