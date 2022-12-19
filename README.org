@@ -50,7 +50,8 @@ Devices have the following properties:
 
      *Example*:
      Customer with 2 Windows and 3 Macs, with the following Services:
-
+     #+caption: Distribution of the devices by services.
+     #+name: tbl:example_distribution_devices_by_services
      |-------------+-----------+--------+--------------|
      | Device Type | Antivirus | Backup | Screen Share |
      |-------------+-----------+--------+--------------|
@@ -91,9 +92,7 @@ Before running the application, You must be installed:
 To run the application You must clone the repository. In a terminal execute:
 
 #+begin_src bash
-
-git clone https://github.com/yferras/backend-interview-project-app.git
-
+$> git clone https://github.com/yferras/backend-interview-project-app.git
 #+end_src
 
 After cloning the repository get into the new folder:
@@ -101,67 +100,135 @@ After cloning the repository get into the new folder:
 
 
 #+begin_src bash
-
-cd backend-interview-project-app
-
+$> cd backend-interview-project-app
 #+end_src
 
 Finally, to run the application:
 
 #+begin_src bash
-
-gradle bootRun
-
+$> gradle bootRun
 #+end_src
 
-** Endpoints.
 
-*** For Devices.
+** About the database.
+
+When the application is running, the database will also already be initialized
+with the data provided as the basis for carrying out this exercise.
+
+The main concepts from the problem's description:
+
+1. device's type, has a unique name and identifier:
+   #+caption: DEVICE_TYPE.
+   #+name: tbl:tbl_DEVICE_TYPE
+   |----+---------|
+   | id | name    |
+   |----+---------|
+   |  1 | linux   |
+   |  2 | mac     |
+   |  3 | windows |
+   |  4 | android |
+   |----+---------|
+
+2. service has a unique name (the names are provided by the problem's
+   description), the identifier, price, and finally a field to describe if the
+   service apply to all device by default.
+   #+caption: SERVICE.
+   #+name: tbl:tbl_SERVICE
+   |----+-----------------------+-------+--------------|
+   | id | name                  | price | apply_to_all |
+   |----+-----------------------+-------+--------------|
+   |  1 | Default               |  4.00 | true         |
+   |  2 | Antivirus for Mac     |  7.00 | false        |
+   |  3 | Antivirus for Windows |  5.00 | false        |
+   |  4 | Backup                |  3.00 | false        |
+   |  5 | Screen Share          |  1.00 | false        |
+   |----+-----------------------+-------+--------------|
+
+3. device (table name: DEVICE): has a unique name, identifier and the its type
+   (defined in the first place), additionally the owner of each device reflected
+   as the user's identifier:
+   #+caption: DEVICE.
+   #+name: tbl:tbl_DEVICE
+   |----+-------------+------------------+-------------|
+   | id | name        | device_type      | app_user_id |
+   |----+-------------+------------------+-------------|
+   |  1 | Mac - 1     | mac->(ID: 2)     |           0 |
+   |  2 | Mac - 2     | mac->(ID: 2)     |           0 |
+   |  3 | Mac - 3     | mac->(ID: 2)     |           0 |
+   |  4 | Windows - 1 | windows->(ID: 3) |           0 |
+   |  5 | Windows - 2 | windows->(ID: 3) |           0 |
+   |----+-------------+------------------+-------------|
+   The data to fill this table come from the same requirements example.
+
+4. For validation purposes a *many-to-many* relationship was added between
+   service and the device's type, so a service like: 'Antivirus for Mac' cannot
+   be applied to other device type than 'mac'. The configuration
+   #+caption: SERVICE_IN_DEVICE_TYPE.
+   #+name: tbl:tbl_SERVICE_IN_DEVICE_TYPE
+   |------------------+------------------------------|
+   | device_type      | service                      |
+   |------------------+------------------------------|
+   | linux->(ID: 1)   | Backup(ID: 4)                |
+   | linux->(ID: 1)   | Screen Share(ID: 5)          |
+   |------------------+------------------------------|
+   | mac->(ID: 2)     | Antivirus for Mac(ID: 2)     |
+   | mac->(ID: 2)     | Backup(ID: 4)                |
+   | mac->(ID: 2)     | Screen Share(ID: 5)          |
+   |------------------+------------------------------|
+   | windows->(ID: 3) | Antivirus for Windows(ID: 3) |
+   | windows->(ID: 3) | Backup(ID: 4)                |
+   | windows->(ID: 3) | Screen Share(ID: 5)          |
+   |------------------+------------------------------|
+   | android->(ID: 4) | Backup(ID: 4)                |
+   | android->(ID: 4) | Screen Share(ID: 5)          |
+   |------------------+------------------------------|
+   Note that, the service: 'Default' is not present in this configuration
+   because by default will be applied to all devices registered in the
+   application.
+5. Finally to accomplish one of the requirements a *many-to-many* relationship
+   between the service and the device was added. This table also was filled with
+   the example provided.
+   #+caption: SERVICE_IN_DEVICE.
+   #+name: tbl:tbl_SERVICE_IN_DEVICE
+   |----------------------+----------------------------|
+   | service              | device                     |
+   |----------------------+----------------------------|
+   | Mac - 1->(ID: 1)     | Antivirus for Mac->(ID: 2) |
+   | Mac - 1->(ID: 1)     | Backup->(ID: 4)            |
+   | Mac - 1->(ID: 1)     | Screen Share->(ID: 5)      |
+   | Mac - 2->(ID: 2)     | Antivirus for Mac->(ID: 2) |
+   | Mac - 2->(ID: 2)     | Backup->(ID: 4)            |
+   | Mac - 3->(ID: 3)     | Antivirus for Mac->(ID: 2) |
+   | Mac - 3->(ID: 3)     | Screen Share->(ID: 5)      |
+   | Windows - 1->(ID: 4) | Antivirus for Windows      |
+   | Windows - 1->(ID: 4) | Backup->(ID: 4)            |
+   | Windows - 1->(ID: 4) | Screen Share->(ID: 5)      |
+   | Windows - 2->(ID: 5) | Antivirus for Windows      |
+   | Windows - 2->(ID: 5) | Screen Share->(ID: 5)      |
+   |----------------------+----------------------------|
+   This data combination matches perfectly with the description of the [[tbl:example_distribution_devices_by_services][example]].
+
+You can feel free to use the majority of the data presented above to run the
+commands in the next sections.
+
+For example, if you want to refer to the device's type: 'mac' you can use
+either the name or its identifier.
+
+* Endpoints.
+
+** For Devices.
 
 You can access to this endpoint with this URL:
 
 http://localhost:8081/v1/device
 
-**** Delete device by identifier.
-
-To delete a specific device, you can use its identifier and calling the *DELETE*
-method on the endpoint. As shown below:
-
-#+begin_src bash
-curl --location --request DELETE 'http://localhost:8081/v1/device/<ID>'
-#+end_src
-
-Where ~<ID>~ is the actual identifier value.
-
-If the identifier exists in the database and the deletion process is successful,
-the status code must be *200 OK*, and nothing is printed in the terminal.
-
-Let's delete the device with identifier 1.
-
-#+begin_src bash
-$> curl --location --request DELETE 'http://localhost:8081/v1/device/1'
-$>
-#+end_src
-
-Otherwise if the identifier doesn't exists, an error message will be printed in
-the terminal. The status will be: *404 Not Found*.
-
-Let's execute the last command again.
-
-#+begin_src bash
-$> curl --location --request DELETE 'http://localhost:8081/v1/device/1'
-E::Device(ID = 1) Not found.%
-$>
-#+end_src
-
-
-**** Add new devices.
+*** Add new devices.
 
 For store new devices, you can use the *POST* method and describe the device's
 data in JSON format.
 
 #+begin_src bash
-curl --location --request POST 'http://localhost:8081/v1/device' \
+$> curl --location --request POST 'http://localhost:8081/v1/device' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "<NAME>",
@@ -169,12 +236,13 @@ curl --location --request POST 'http://localhost:8081/v1/device' \
         "name": "<DEVICE_TYPE_NAME>"
     }
 }'
+$>
 #+end_src
 
 Alternatively (and also equivalent to the last command).
 
 #+begin_src bash
-curl --location --request POST 'http://localhost:8081/v1/device' \
+$> curl --location --request POST 'http://localhost:8081/v1/device' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "<NAME>",
@@ -182,12 +250,15 @@ curl --location --request POST 'http://localhost:8081/v1/device' \
         "id": "<DEVICE_TYPE_ID>"
     }
 }'
+$>
 #+end_src
 
 Where:
 - ~<NAME>~ :: Is the name for the new device.
 - ~<DEVICE_TYPE_NAME>~ :: Is the name of the device's type.
 - ~<DEVICE_TYPE_ID>~ :: Is the device's identifier.
+and the placeholders: ~<DEVICE_TYPE_ID>~ or ~<DEVICE_TYPE_ID>~ only can be
+substituted with the values from the table: [[tbl:tbl_DEVICE_TYPE][DEVICE_TYPE]]
 
 If the insertion process is successful. The returned status will be: *201
 Created*.
@@ -206,7 +277,7 @@ this JSON is not allowed (even if the combination exists):
 #+end_src
 
 And if it is used, a validation error it will be sent. This behavior is to
-prevent any non-existent data combinations. See:
+prevent any non-existent data combinations. Let's test it:
 
 #+begin_src bash
 $> curl --location --request POST 'http://localhost:8081/v1/device' \
@@ -222,7 +293,7 @@ $> curl --location --request POST 'http://localhost:8081/v1/device' \
 $>
 #+end_src
 
-Let's take a look at the returned content. The content is a JSON:
+The returned content is a JSON:
 
 #+begin_src json
 {
@@ -244,16 +315,17 @@ Let's take a look at the returned content. The content is a JSON:
 
 Where:
  - ~deviceType~ :: is an array that contains all error messages. The name of
-   this property is the name of the actual problematic field (for this example
+   this property is the name of the current problematic field (for this example
    the name is ~deviceType~).
  - ~type~ :: is the name of the actual DTO supplied
- - ~value~ :: is the suplied object.
+ - ~value~ :: is the supplied object.
 
-Also, if the correct format is used, the existence of the given data will be
-checked against the database; if not exist a *404 Not Found* (e.g.: the supplied
-values for: ~<DEVICE_TYPE_ID>~ or ~<DEVICE_TYPE_NAME>~ are not present in the
-database). In the response additionally comes the valid combinations that you
-can use to fix the problem. See:
+Also, if the correct format is used (using one of the properties), the existence
+of the given data, will be checked against the database; if not exist a *404 Not
+Found* (e.g.: the supplied values for: ~<DEVICE_TYPE_ID>~ or
+~<DEVICE_TYPE_NAME>~ are not present in the database). In the response
+additionally comes the valid combinations that you can use to fix the problem.
+See:
 
 #+begin_src bash
 $> curl --location --request POST 'http://localhost:8081/v1/device' \
@@ -357,30 +429,140 @@ $>
 
   In theses cases the status returned is: *409 Conflicted*.
 
-**** Service.
+*** Delete the devices.
+
+To delete a specific device, you can use its identifier and calling the *DELETE*
+method on the endpoint. As shown below:
+
+#+begin_src bash
+$> curl --location --request DELETE 'http://localhost:8081/v1/device/<ID>'
+$>
+#+end_src
+
+Where ~<ID>~ is the actual identifier value.
+
+If the identifier exists in the database and the deletion process is successful,
+the status code must be *200 OK*, and nothing is printed in the terminal.
+
+Let's delete the device with identifier 1.
+
+#+begin_src bash
+$> curl --location --request DELETE 'http://localhost:8081/v1/device/1'
+$>
+#+end_src
+
+Otherwise if the identifier doesn't exists, an error message will be printed in
+the terminal. The status will be: *404 Not Found*.
+
+Let's execute the last command again.
+
+#+begin_src bash
+$> curl --location --request DELETE 'http://localhost:8081/v1/device/1'
+E::Device(ID = 1) Not found.%
+$>
+#+end_src
+
+WARNING: if you delete some data the subsequent results will be affected. If
+that case happens you could stop the server by pressing ~Ctrl + C~ where the
+server is running and then repeat the command:
+
+#+begin_src bash
+$> gradle bootRun
+$>
+#+end_src
+
+** Service.
+
+You can access to this endpoint with this URL:
+
+http://localhost:8081/v1/service
+
+*** Add new services.
 
 
-**** Add services to devices.
+*** Delete the services.
+
+** Add services to devices.
+
 You can create a relationship between service and device using this endpoint:
 
-Http://localhost:8081/v1/config 
+http://localhost:8081/v1/config
 
+And a JSON that has the following structure:
+
+#+begin_src jsonc
 {
- "device": <"device_name">|<device_id>,
- "service": <"service_name">|<service_id>
+    "device": "<DEVICE_NAME>"|<DEVICE_ID>,
+    "service": "<SERVICE_NAME>"|<SERVICE_ID>
 }
+#+end_src
 
-Any combination between the values is allowed. 
+Any combination between the values is allowed:
 
-POST: creates a relationship between service and device.
-DELETE: removes the relationship.
+#+begin_src jsonc
+{
+    "device":  "<DEVICE_NAME>"
+    "service": "<SERVICE_NAME>"
+}
+// OR
+{
+    "device": <DEVICE_ID>,
+    "service":<SERVICE_ID>
+}
+// OR
+{
+    "device": "<DEVICE_NAME>"
+    "service": <SERVICE_ID>
+}
+// OR
+{
+    "device": <DEVICE_ID>,
+    "service": "<SERVICE_NAME>"
+}
+#+end_src
+
+Where:
+- ~<DEVICE_NAME>~ :: ??
+- ~<SERVICE_ID>~ :: ??
+- ~<SERVICE_NAME>~ :: ??
+- ~<DEVICE_ID>~ :: ??
+
+The same structure will be used to: create a new relationship between the
+service and the device; or delete the relationship. The only difference to
+achieve this is the method used:
+- POST: creates a relationship between service and device.
+- DELETE: removes the relationship.
+
+TO-DO: place the examples.
+
+** Total cost per customer.
+
+
+http://localhost:8081/v1/reports/total-per-customer/<ID>
+
 
 TO-DO
 
-**** Total cost per customer.
-TO-DO 
-**** Using the caches.
-TO-DO 
+
+** Using the caches.
+
+There are two caches. One that is pre-loaded when the app is started, and other
+that loads the data on demand.
+
+Both cache share the same URL:
+
+
+http://localhost:8081/v1/device/cache/
+
+But the difference to access one or the other is the type of the data. If you
+use the ID of the device you must be accessing the pre-loaded, but if you use
+the name of the device instead you are accessing the cache that loads the data
+on demand.
+
+
+
+TO-DO
+
 
 
 #  LocalWords:  DTO JVM cURL Gradle Unprocessable JSON RMM
