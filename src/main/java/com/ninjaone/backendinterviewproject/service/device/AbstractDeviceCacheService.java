@@ -1,5 +1,6 @@
 package com.ninjaone.backendinterviewproject.service.device;
 
+import com.ninjaone.backendinterviewproject.common.exception.NoDataException;
 import com.ninjaone.backendinterviewproject.database.device.DeviceRepository;
 import com.ninjaone.backendinterviewproject.model.reports.IDeviceReport;
 import lombok.AccessLevel;
@@ -28,7 +29,7 @@ public abstract class AbstractDeviceCacheService<K extends Serializable>
     }
 
     @Override
-    public IDeviceReport get(K key) {
+    public IDeviceReport get(K key) throws NoDataException {
         IDeviceReport report = getCache().get(key);
         if (report == null) {
             report = delegateGet(key);
@@ -44,7 +45,7 @@ public abstract class AbstractDeviceCacheService<K extends Serializable>
         return report;
     }
 
-    protected abstract IDeviceReport delegateGet(K key);
+    protected abstract IDeviceReport delegateGet(K key) throws NoDataException;
 
     @Override
     public void put(K key, IDeviceReport value) {
