@@ -20,7 +20,7 @@ public class DeviceCacheController {
     @GetMapping("/{value}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public IDeviceReport getFromPreLoadCache(@NonNull @PathVariable("value") Serializable value)  {
+    public IDeviceReport getFromCache(@NonNull @PathVariable("value") Serializable value)  {
         String str = value.toString();
         try {
             Long id = Long.parseLong(str);
