@@ -15,10 +15,7 @@ public class CacheConfig {
     @Bean
     public CommandLineRunner loadData(
             List<IDeviceCacheService<Long, IDeviceReport>> cacheServiceList) {
-        return (args) -> {
-            cacheServiceList.forEach(IDeviceCacheService::preload);
-        };
-
+        return args -> cacheServiceList.forEach(IDeviceCacheService::preload);
     }
 
 

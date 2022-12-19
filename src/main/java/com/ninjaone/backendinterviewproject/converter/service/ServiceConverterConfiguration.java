@@ -5,7 +5,6 @@ import com.ninjaone.backendinterviewproject.common.converter.IConverter;
 import com.ninjaone.backendinterviewproject.dto.ServiceDto;
 import com.ninjaone.backendinterviewproject.model.Service;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
@@ -18,12 +17,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ServiceConverterConfiguration {
 
-    @Autowired
-    private ServiceSettings settings;
 
 
     @Bean("serviceConverter")
-    public IConverter<Service, ServiceDto> getServiceConverter(@NonNull List<AbstractConverterDecorator<Service, ServiceDto>> decorators) {
+    public IConverter<Service, ServiceDto> getServiceConverter(
+            ServiceSettings settings,
+            @NonNull List<AbstractConverterDecorator<Service, ServiceDto>> decorators
+    ) {
         ServiceConverter converter = new ServiceConverter();
 
         if (decorators.isEmpty()) {

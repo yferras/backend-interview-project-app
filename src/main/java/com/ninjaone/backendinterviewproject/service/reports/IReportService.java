@@ -2,7 +2,9 @@ package com.ninjaone.backendinterviewproject.service.reports;
 
 import com.ninjaone.backendinterviewproject.dto.reports.TotalCostPerUser;
 
-public interface IReportService {
+import java.io.Serializable;
+
+public interface IReportService extends Serializable {
 
     /**
      * Gets the total cost by customer.

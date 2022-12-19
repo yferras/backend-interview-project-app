@@ -3,7 +3,6 @@ package com.ninjaone.backendinterviewproject.service.reports.decorator;
 
 import com.ninjaone.backendinterviewproject.service.reports.IReportService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,16 +15,12 @@ public class DecoratorConfig {
 
     @Value("${app.params.include-iva}")
     private boolean includeIva;
-    @Autowired
-    @Qualifier("reportDefaultService")
-    private IReportService defaultService;
 
-    @Autowired
-    @Qualifier("reportIvaDecorator")
-    private AbstractReportServiceDecorator ivaDecorator;
 
     @Bean("reportService")
-    IReportService getReportService() {
+    IReportService getReportService(
+            @Qualifier("reportDefaultService") IReportService defaultService,
+            @Qualifier("reportIvaDecorator") AbstractReportServiceDecorator ivaDecorator) {
 
         if (includeIva) {
             ivaDecorator.setDecorated(defaultService);

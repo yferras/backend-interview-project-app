@@ -9,8 +9,9 @@ import java.util.Map;
  */
 public class ValidationException extends BusinessRuntimeException {
 
+
     @Getter
-    private final Map<String, Object> map;
+    private final transient Map<String, Object> map;
 
     public ValidationException(Map<String, Object> map) {
         super("Validation issues.");

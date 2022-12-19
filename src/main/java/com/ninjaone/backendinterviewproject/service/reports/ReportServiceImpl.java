@@ -18,8 +18,8 @@ import java.util.Set;
 @Slf4j
 public class ReportServiceImpl implements IReportService {
 
-    private final DeviceRepository deviceRepository;
-    private final ServiceRepository serviceRepository;
+    private final transient DeviceRepository deviceRepository;
+    private final transient ServiceRepository serviceRepository;
 
     @Override
     public TotalCostPerUser calcTotalCost(long userId) {
