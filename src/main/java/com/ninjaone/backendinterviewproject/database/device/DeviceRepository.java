@@ -2,7 +2,7 @@ package com.ninjaone.backendinterviewproject.database.device;
 
 import com.ninjaone.backendinterviewproject.model.Device;
 import com.ninjaone.backendinterviewproject.model.reports.IDeviceReport;
-import com.ninjaone.backendinterviewproject.model.reports.TotalDevicesPerServiceByUserReport;
+import com.ninjaone.backendinterviewproject.model.reports.ITotalCostByUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,7 +23,7 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
      * </p>
      *
      * @param userId user's identifier.
-     * @return a list of instances of {@link TotalDevicesPerServiceByUserReport}.
+     * @return a list of instances of {@link ITotalCostByUser}.
      */
     @Query(
             "select " +
@@ -37,7 +37,7 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
                     "   and d.userId = :userId " +
                     " group by s.id "
     )
-    List<TotalDevicesPerServiceByUserReport> getTotalDevicesPerServiceByUserId(@Param("userId") long userId);
+    List<ITotalCostByUser> getTotalDevicesPerServiceByUserId(@Param("userId") long userId);
 
 
     @Query(

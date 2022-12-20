@@ -2,9 +2,9 @@ package com.ninjaone.backendinterviewproject.model.reports;
 
 
 /**
- * POJO for store the total devices per service by user.
+ * Total cost by user.
  */
-public interface TotalDevicesPerServiceByUserReport {
+public interface ITotalCostByUser {
     long getUserId();
     long getTotalDevices();
 

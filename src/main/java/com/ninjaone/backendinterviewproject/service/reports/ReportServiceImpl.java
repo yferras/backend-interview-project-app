@@ -5,7 +5,7 @@ import com.ninjaone.backendinterviewproject.database.device.DeviceRepository;
 import com.ninjaone.backendinterviewproject.database.service.ServiceRepository;
 import com.ninjaone.backendinterviewproject.dto.reports.TotalCostPerUser;
 import com.ninjaone.backendinterviewproject.model.Service;
-import com.ninjaone.backendinterviewproject.model.reports.TotalDevicesPerServiceByUserReport;
+import com.ninjaone.backendinterviewproject.model.reports.ITotalCostByUser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,7 +37,7 @@ public class ReportServiceImpl implements IReportService {
         if (totalDevicesPerUser == 0) {
             return new TotalCostPerUser(0.0);
         }
-        List<TotalDevicesPerServiceByUserReport> report =
+        List<ITotalCostByUser> report =
                 deviceRepository.getTotalDevicesPerServiceByUserId(userId);
 
         double totalCost = report.stream()
