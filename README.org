@@ -314,7 +314,7 @@ or ~id~, but not both at the same time. For example this JSON is not allowed
 #+end_src
 
 And if it is used, a validation error it will be returned in conjunction with the
-status *422 Unprocessable*. This behavior is to prevent any non-existent data
+status *422 Unprocessable entity*. This behavior is to prevent any non-existent data
 combinations. Let's test it:
 
 #+begin_src bash
@@ -448,7 +448,7 @@ The JSON returned:
 #+end_src
 
 - ~name~ cannot be neither null, neither empty nor blank string. The status
-  returned in these cases is: *422 Unprocessable Entity*.
+  returned in these cases is: *422 Unprocessable entity*.
   - Null value:
     #+begin_src bash
 $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
@@ -688,7 +688,7 @@ The JSON:
 For this endpoint the validations are:
 
 - ~name~ cannot be neither null, neither empty nor blank string. The status
-  returned in these cases is: *422 Unprocessable Entity*. The process is similar
+  returned in these cases is: *422 Unprocessable entity*. The process is similar
   to the validations in the ~name~ of the Device.
 - ~price~ also cannot be null, or a value less than 0.0.
   - Null:
