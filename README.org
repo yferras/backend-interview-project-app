@@ -984,7 +984,7 @@ Where: ~<ID>~ is the customer's identifier.
 identifier 0./
 
 If you performs a request to a newly launched application; that is configured as
-described in the example of the section: [[Requirements]]. (See the [[tbl:example_distribution_devices_by_services][table]])
+described in the example of the section: [[Requirements.]] (See the [[tbl:example_distribution_devices_by_services][table]])
 
 #+begin_src bash
 $> curl -i --location --request GET \
