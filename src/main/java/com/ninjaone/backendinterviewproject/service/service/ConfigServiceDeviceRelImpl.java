@@ -1,4 +1,4 @@
-package com.ninjaone.backendinterviewproject.service.config;
+package com.ninjaone.backendinterviewproject.service.service;
 
 import com.ninjaone.backendinterviewproject.common.exception.IllegalDataCombinationException;
 import com.ninjaone.backendinterviewproject.common.exception.NoDataException;

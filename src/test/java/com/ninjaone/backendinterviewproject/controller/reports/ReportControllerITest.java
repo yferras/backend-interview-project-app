@@ -6,7 +6,7 @@ import com.ninjaone.backendinterviewproject.controller.AbstractControllerITest;
 import com.ninjaone.backendinterviewproject.dto.ConfigServiceDeviceRelDto;
 import com.ninjaone.backendinterviewproject.dto.DeviceDto;
 import com.ninjaone.backendinterviewproject.dto.DeviceTypeDto;
-import com.ninjaone.backendinterviewproject.service.config.IConfigServiceDeviceRelService;
+import com.ninjaone.backendinterviewproject.service.service.IConfigServiceDeviceRelService;
 import com.ninjaone.backendinterviewproject.service.device.IDeviceService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

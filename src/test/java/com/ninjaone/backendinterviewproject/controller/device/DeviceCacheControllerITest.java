@@ -3,7 +3,7 @@ package com.ninjaone.backendinterviewproject.controller.device;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ninjaone.backendinterviewproject.controller.AbstractControllerITest;
 import com.ninjaone.backendinterviewproject.dto.ConfigServiceDeviceRelDto;
-import com.ninjaone.backendinterviewproject.service.config.IConfigServiceDeviceRelService;
+import com.ninjaone.backendinterviewproject.service.service.IConfigServiceDeviceRelService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

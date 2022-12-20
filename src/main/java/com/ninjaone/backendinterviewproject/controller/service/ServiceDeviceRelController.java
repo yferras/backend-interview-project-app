@@ -1,8 +1,8 @@
-package com.ninjaone.backendinterviewproject.controller.config;
+package com.ninjaone.backendinterviewproject.controller.service;
 
 
 import com.ninjaone.backendinterviewproject.dto.ConfigServiceDeviceRelDto;
-import com.ninjaone.backendinterviewproject.service.config.IConfigServiceDeviceRelService;
+import com.ninjaone.backendinterviewproject.service.service.IConfigServiceDeviceRelService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/config")
 @AllArgsConstructor
-public class ConfigServiceDeviceRelController {
+public class ServiceDeviceRelController {
 
     private final IConfigServiceDeviceRelService iConfigServiceDeviceRelService;
 

@@ -1,9 +1,9 @@
-package com.ninjaone.backendinterviewproject.controller.config;
+package com.ninjaone.backendinterviewproject.controller.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ninjaone.backendinterviewproject.controller.AbstractControllerITest;
 import com.ninjaone.backendinterviewproject.dto.ConfigServiceDeviceRelDto;
-import com.ninjaone.backendinterviewproject.service.config.IConfigServiceDeviceRelService;
+import com.ninjaone.backendinterviewproject.service.service.IConfigServiceDeviceRelService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,12 +20,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class ConfigServiceDeviceRelControllerITest extends AbstractControllerITest {
+class ServiceDeviceRelControllerITest extends AbstractControllerITest {
 
     private final IConfigServiceDeviceRelService service;
 
     @Autowired
-    public ConfigServiceDeviceRelControllerITest(
+    public ServiceDeviceRelControllerITest(
             MockMvc mockMvc,
             ObjectMapper objectMapper,
             IConfigServiceDeviceRelService service

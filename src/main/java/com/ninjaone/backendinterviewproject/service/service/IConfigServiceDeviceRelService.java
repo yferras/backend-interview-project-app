@@ -1,4 +1,4 @@
-package com.ninjaone.backendinterviewproject.service.config;
+package com.ninjaone.backendinterviewproject.service.service;
 
 import com.ninjaone.backendinterviewproject.dto.ConfigServiceDeviceRelDto;
 
