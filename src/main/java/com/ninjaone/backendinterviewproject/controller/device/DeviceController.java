@@ -9,7 +9,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/device")
+@RequestMapping("/v1/devices")
 @AllArgsConstructor
 public class DeviceController {
 

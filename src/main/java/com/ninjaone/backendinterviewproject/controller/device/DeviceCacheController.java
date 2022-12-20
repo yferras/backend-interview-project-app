@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.Serializable;
 
 @RestController
-@RequestMapping("/v1/device/cache")
+@RequestMapping("/v1/devices/caches")
 @AllArgsConstructor
 public class DeviceCacheController {
 

@@ -14,7 +14,7 @@ public class ReportController {
 
     private IReportService reportService;
 
-    @GetMapping("/total-per-customer/{id}")
+    @GetMapping("/customers/{id}/totals")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public TotalCostPerUser calcTotalCost(@NonNull @PathVariable("id") Long id) {

@@ -79,7 +79,7 @@ class DeviceControllerITest extends AbstractEntityControllerITest<Long, DeviceDt
 
 
         ResultActions resultActions = mockMvc.perform(
-                post("/v1/device")
+                post("/v1/devices")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(dto))
         );
@@ -128,7 +128,7 @@ class DeviceControllerITest extends AbstractEntityControllerITest<Long, DeviceDt
 
 
         mockMvc.perform(
-                        delete("/v1/device/{id}", device.getId())
+                        delete("/v1/devices/{id}", device.getId())
                 )
                 .andExpect(status().isOk());
 
@@ -144,7 +144,7 @@ class DeviceControllerITest extends AbstractEntityControllerITest<Long, DeviceDt
     void deleteByIdNotFound() throws Exception {
         final Long id = -1000L;
         ResultActions resultActions = mockMvc.perform(
-                        delete("/v1/device/{id}", id)
+                        delete("/v1/devices/{id}", id)
                 );
         MessageNotFoundDescriptor descriptor = checkNotFound(resultActions);
         assertEquals("Device", descriptor.getEntityName());

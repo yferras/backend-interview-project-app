@@ -48,7 +48,7 @@ class DeviceCacheControllerITest extends AbstractControllerITest {
             String resultName
     ) throws Exception {
         ResultActions resultActions = mockMvc.perform(
-                get("/v1/device/cache/{value}", key)
+                get("/v1/devices/caches/{value}", key)
         );
 
         if (httpStatusCode == 404) {
@@ -99,7 +99,7 @@ class DeviceCacheControllerITest extends AbstractControllerITest {
 
     private void testCacheAddService(Serializable key, String deviceName, Long deviceId) throws Exception {
         ResultActions resultActions = mockMvc.perform(
-                get("/v1/device/cache/{value}", key)
+                get("/v1/devices/caches/{value}", key)
         );
         // Check the cost before creating the relationship.
         resultActions.andExpect(status().isOk())
@@ -115,7 +115,7 @@ class DeviceCacheControllerITest extends AbstractControllerITest {
                         .build()
         );
         resultActions = mockMvc.perform(
-                get("/v1/device/cache/{value}", deviceName)
+                get("/v1/devices/caches/{value}", deviceName)
         );
         // Check the cost before creating the relationship.
         resultActions.andExpect(status().isOk())
@@ -134,7 +134,7 @@ class DeviceCacheControllerITest extends AbstractControllerITest {
 
     private void testCacheRemoveService(Serializable key, String deviceName, Long deviceId) throws Exception {
         ResultActions resultActions = mockMvc.perform(
-                get("/v1/device/cache/{value}", key)
+                get("/v1/devices/caches/{value}", key)
         );
         // Check the cost before creating the relationship.
         resultActions.andExpect(status().isOk())
@@ -150,7 +150,7 @@ class DeviceCacheControllerITest extends AbstractControllerITest {
                         .build()
         );
         resultActions = mockMvc.perform(
-                get("/v1/device/cache/{value}", deviceName)
+                get("/v1/devices/caches/{value}", deviceName)
         );
         // Check the cost before creating the relationship.
         resultActions.andExpect(status().isOk())

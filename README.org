@@ -228,7 +228,7 @@ To store new devices, you can use the *POST* method and describe the device's
 data in JSON format.
 
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/device' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "<DEVICE_NAME>",
@@ -241,7 +241,7 @@ $> curl -i --location --request POST 'http://localhost:8081/v1/device' \
 Alternatively (and also equivalent to the last command).
 
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/device' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "<DEVICE_NAME>",
@@ -262,7 +262,7 @@ If the insertion process is successful. The returned status will be: *201
 Created*, also a JSON will be returned.
 
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/device' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "Linux - 1",
@@ -314,7 +314,7 @@ status *422 Unprocessable*. This behavior is to prevent any non-existent data
 combinations. Let's test it:
 
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/device' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "computer #1",
@@ -367,7 +367,7 @@ additionally comes the valid combinations that you can use to fix the problem.
 See:
 
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/device' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "computer #1",
@@ -388,7 +388,7 @@ $>
 The same happens if you provied a non-existent value for ~deviceType.name~.
 
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/device' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "computer #1",
@@ -412,7 +412,7 @@ Other validations performed:
   Unprocessable Entity*. In the next command, the property will be omitted.
 
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/device' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "computer #1"
@@ -447,7 +447,7 @@ The JSON returned:
   returned in these cases is: *422 Unprocessable Entity*.
   - Null value:
     #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/device' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": null,
@@ -483,7 +483,7 @@ The JSON returned:
 
   - Empty string:
  #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/device' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "",
@@ -519,7 +519,7 @@ The JSON returned:
 
   - Blank string:
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/device' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "    ",
@@ -556,7 +556,7 @@ The JSON returned:
 
 - The device name is unique in the database. Let's use a name that has already been used.
   #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/device' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "Mac - 1",
@@ -581,7 +581,7 @@ To delete a specific device, you can use its identifier and calling the *DELETE*
 method on the endpoint. As shown below:
 
 #+begin_src bash
-$> curl -i --location --request DELETE 'http://localhost:8081/v1/device/<ID>'
+$> curl -i --location --request DELETE 'http://localhost:8081/v1/devices/<ID>'
 #+end_src
 
 Where ~<ID>~ is the actual identifier.
@@ -592,7 +592,7 @@ the status code must be *200 OK*, and nothing is printed in the terminal.
 Let's delete the device with identifier 1.
 
 #+begin_src bash
-$> curl -i --location --request DELETE 'http://localhost:8081/v1/device/1'
+$> curl -i --location --request DELETE 'http://localhost:8081/v1/devices/1'
 HTTP/1.1 200
 Content-Length: 0
 Date: Mon, 19 Dec 2022 16:42:37 GMT
@@ -606,7 +606,7 @@ the terminal. The status will be: *404 Not Found*.
 Let's execute the last command again.
 
 #+begin_src bash
-$> curl -i --location --request DELETE 'http://localhost:8081/v1/device/1'
+$> curl -i --location --request DELETE 'http://localhost:8081/v1/devices/1'
 HTTP/1.1 404
 Content-Type: text/plain;charset=UTF-8
 Content-Length: 28
@@ -637,7 +637,7 @@ To store new services, you can use the *POST* method and describe the device's
 data in JSON format.
 
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/service' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/services' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "<SERVICE_NAME>",
@@ -654,7 +654,7 @@ returned status will be: *201 Created*. In addition the inserted service will be
 returned as JSON.
 
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/service' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/services' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "monitoring",
@@ -689,7 +689,7 @@ For this endpoint the validations are:
 - ~price~ also cannot be null, or a value less than 0.0.
   - Null:
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/service' \
+$> curl -i --location --request POST 'http://localhost:8081/v1/services' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "monitoring"
@@ -721,7 +721,7 @@ The JSON returned:
   - Less than 0.0:
 
 #+begin_src bash
-curl -i --location --request POST 'http://localhost:8081/v1/service' \
+curl -i --location --request POST 'http://localhost:8081/v1/services' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "monitoring",
@@ -758,7 +758,7 @@ To delete a specific service, you can use its identifier and calling the *DELETE
 method on the endpoint. As shown below:
 
 #+begin_src bash
-$> curl -i --location --request DELETE 'http://localhost:8081/v1/service/<ID>'
+$> curl -i --location --request DELETE 'http://localhost:8081/v1/services/<ID>'
 #+end_src
 
 Where ~<ID>~ is the actual identifier.
@@ -769,7 +769,7 @@ the status code must be *200 OK*, and nothing is printed in the terminal.
 Let's delete the service with identifier 1.
 
 #+begin_src bash
-$> curl -i --location --request DELETE 'http://localhost:8081/v1/service/1'
+$> curl -i --location --request DELETE 'http://localhost:8081/v1/services/1'
 HTTP/1.1 200
 Content-Length: 0
 Date: Mon, 19 Dec 2022 18:34:40 GMT
@@ -783,7 +783,7 @@ the terminal. The status will be: *404 Not Found*.
 Let's execute the last command again.
 
 #+begin_src bash
-$> curl -i --location --request DELETE 'http://localhost:8081/v1/service/1'
+$> curl -i --location --request DELETE 'http://localhost:8081/v1/services/1'
 HTTP/1.1 404
 Content-Type: text/plain;charset=UTF-8
 Content-Length: 28
@@ -980,7 +980,7 @@ that loads the data on demand.
 
 Both cache share the same URL:
 
-http://localhost:8081/v1/device/cache/
+http://localhost:8081/v1/devices/caches/
 
 But the difference to access one or the other is the type of the data. If you
 use the device's identifier you must be accessing the pre-loaded cache; but if

@@ -9,7 +9,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/service")
+@RequestMapping("/v1/services")
 @AllArgsConstructor
 public class ServiceController {
 

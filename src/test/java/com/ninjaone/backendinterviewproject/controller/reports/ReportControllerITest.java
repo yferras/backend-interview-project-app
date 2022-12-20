@@ -56,7 +56,7 @@ class ReportControllerITest extends AbstractControllerITest {
         double expectedCostBeforeConfig = 20.0;
         expectedCostBeforeConfig *= includeIva ? (1.0 + iva) : 1.0;
         mockMvc.perform(
-                        get("/v1/reports/total-per-customer/{id}", CUSTOMER_ID)
+                        get("/v1/reports/customers/{id}/totals", CUSTOMER_ID)
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -69,7 +69,7 @@ class ReportControllerITest extends AbstractControllerITest {
         double expectedCostAfterConfig = 64.0;
         expectedCostAfterConfig *= includeIva ? (1.0 + iva) : 1.0;
         mockMvc.perform(
-                        get("/v1/reports/total-per-customer/{id}", CUSTOMER_ID)
+                        get("/v1/reports/customers/{id}/totals", CUSTOMER_ID)
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -203,7 +203,7 @@ class ReportControllerITest extends AbstractControllerITest {
     void calcTotalCostUserNotFound() throws Exception {
 
         ResultActions resultActions = mockMvc.perform(
-                get("/v1/reports/total-per-customer/{id}", -1)
+                get("/v1/reports/customers/{id}/totals", -1)
         );
 
         resultActions

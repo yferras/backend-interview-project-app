@@ -60,7 +60,7 @@ class ServiceControllerITest extends AbstractEntityControllerITest<Long, Service
                 .build();
 
         ResultActions resultActions = mockMvc.perform(
-                post("/v1/service")
+                post("/v1/services")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(dto))
         );
@@ -95,7 +95,7 @@ class ServiceControllerITest extends AbstractEntityControllerITest<Long, Service
         dto = service.addNew(dto);
 
         mockMvc.perform(
-                        delete("/v1/service/{id}", dto.getId())
+                        delete("/v1/services/{id}", dto.getId())
                 )
                 .andExpect(status().isOk());
 
@@ -112,7 +112,7 @@ class ServiceControllerITest extends AbstractEntityControllerITest<Long, Service
 
         final Long id = -1000L;
         ResultActions resultActions = mockMvc.perform(
-                        delete("/v1/service/{id}", id)
+                        delete("/v1/services/{id}", id)
                 );
         MessageNotFoundDescriptor descriptor = checkNotFound(resultActions);
         assertEquals("Service", descriptor.getEntityName());
