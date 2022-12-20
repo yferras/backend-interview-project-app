@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/config")
+@RequestMapping("/v1/services/rels/device")
 @AllArgsConstructor
 public class ServiceDeviceRelController {
 

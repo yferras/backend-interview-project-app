@@ -94,7 +94,7 @@ class ServiceDeviceRelControllerITest extends AbstractControllerITest {
                 .build();
 
         ResultActions resultActions = mockMvc.perform(
-                post("/v1/config")
+                post("/v1/services/rels/device")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(dto))
         );
@@ -137,7 +137,7 @@ class ServiceDeviceRelControllerITest extends AbstractControllerITest {
         assertTrue(dto.getEnabled());
 
         ResultActions resultActions = mockMvc.perform(
-                delete("/v1/config")
+                delete("/v1/services/rels/device")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(dto))
         );

@@ -807,13 +807,14 @@ $>
 #+end_src
 
 
-** Add/Remove services to devices.
+** Manage relationship between services and devices.
 
-You can create a relationship between service and device using this endpoint:
+You can create (or delete) a relationship between services and devices with this
+endpoint:
 
-http://localhost:8081/v1/config
+http://localhost:8081/v1/services/rels/device
 
-And a JSON that has the following structure:
+And using a JSON that has the following structure:
 
 #+begin_src jsonc
 {
@@ -832,7 +833,7 @@ Any combination between the values is allowed:
 // OR
 {
     "device": <DEVICE_ID>,
-    "service":<SERVICE_ID>
+    "service": <SERVICE_ID>
 }
 // OR
 {
@@ -852,18 +853,15 @@ Where:
 - ~<SERVICE_NAME>~ :: Is the name of the service.
 - ~<DEVICE_ID>~ :: Is the identifier of the service.
 
-The same structure will be used to: create a new relationship between the
-service and the device; or delete the relationship. The only difference to
-achieve this is the method used:
-- POST: creates a relationship between service and device.
-- DELETE: removes the relationship.
 
-**** Add.
+**** Create a relationship.
 
-With this example we are adding the service: 'Backup' to 'Windows - 2':
+With this example we are creating a relationship between: 'Backup' and
+'Windows - 2':
 
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/config' \
+$> curl -i --location --request POST \
+'http://localhost:8081/v1/services/rels/device' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "device": "Windows - 2",
@@ -878,8 +876,10 @@ Date: Mon, 19 Dec 2022 18:43:29 GMT
 $>
 #+end_src
 
-If all goes well, the status *201 Created* is returned, and also we receive a JSON
-similar to it was sent it:
+/Note that the method used in the command above is: *POST*./
+
+If all goes well, the status *201 Created* is returned, and also we receive a
+JSON similar to it was sent it:
 
 #+begin_src jsonc
 {
@@ -889,18 +889,18 @@ similar to it was sent it:
 }
 #+end_src
 
-the difference is that this JSON has a property:
-~enabled~ equals to ~true~. The ~true~ value means that the relationship between
-the service and the device was create.
+the difference is that this JSON has a property: ~enabled~ equals to ~true~. The
+~true~ value means that the relationship between the service and the device was
+created.
 
 
-**** Delete.
+**** Delete a relationship.
 
-To remove the service 'Backup' from the device 'Windows - 2', only the method
-is changed to DELETE:
+To revert the relationship created in the previous section.
 
 #+begin_src bash
-$> curl -i --location --request DELETE 'http://localhost:8081/v1/config' \
+$> curl -i --location --request DELETE \
+'http://localhost:8081/v1/services/rels/delete/device' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "device": "Windows - 2",
@@ -914,6 +914,8 @@ Date: Mon, 19 Dec 2022 18:43:29 GMT
 {"device":"Windows - 2","service":"Backup","enabled":false}%
 $>
 #+end_src
+
+/Note that the method used in the command above is: *DELETE*./
 
 If all goes well, the status *200 Ok* is returned, and also we receive a JSON:
 
@@ -932,11 +934,12 @@ the service and the device was removed.
 
 For this endpoint the validations are similar to the previous endpoints.
 
-None of the fields cannot be null neither empty nor blank string. The status in
+None of the fields cannot be null neither empty nor blank string. The status if
 the validation fails will be: *422 Unprocessable entity*.
 
 #+begin_src bash
-$> curl -i --location --request DELETE 'http://localhost:8081/v1/config' \
+$> curl -i --location --request DELETE \
+'http://localhost:8081/v1/services/rels/delete/device' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "device": "",
@@ -950,10 +953,11 @@ Date: Mon, 19 Dec 2022 19:10:31 GMT
 {"type":"ConfigServiceDeviceRelDto","device":["Cannot be an empty string."],"value":{"device":"","service":"Backup","enabled":null}}%
 #+end_src
 
-Also non-existent data will be validated, the status will be: *404 Not founf*.
+Also non-existent data will be validated, the status will be: *404 Not found*.
 
 #+begin_src bash
-$> curl -i --location --request POST 'http://localhost:8081/v1/config' \
+$> curl -i --location --request POST \
+'http://localhost:8081/v1/services/rels/delete/device' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "device": "Linux - 1",
