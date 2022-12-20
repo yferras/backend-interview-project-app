@@ -117,8 +117,12 @@ with the data provided as the basis for carrying out this exercise.
 
 The main concepts from the problem's description:
 
+#+caption: Entity relationship diagram.
+#+name: img:er_diagram
+[[./doc/img/entity relationship diagram.png]]
+
 1. device's type, has a unique name and identifier:
-   #+caption: DEVICE_TYPE.
+   #+caption: device_type.
    #+name: tbl:tbl_DEVICE_TYPE
    |----+---------|
    | id | name    |
@@ -132,7 +136,7 @@ The main concepts from the problem's description:
 2. service has a unique name (the names are provided by the problem's
    description), the identifier, price, and finally a field to describe if the
    service apply to all device by default.
-   #+caption: SERVICE.
+   #+caption: service.
    #+name: tbl:tbl_SERVICE
    |----+-----------------------+-------+--------------|
    | id | name                  | price | apply_to_all |
@@ -144,10 +148,10 @@ The main concepts from the problem's description:
    |  5 | Screen Share          |  1.00 | false        |
    |----+-----------------------+-------+--------------|
 
-3. device (table name: DEVICE): has a unique name, identifier and the its type
+3. device: has a unique name, identifier and the its type
    (defined in the first place), additionally the owner of each device reflected
    as the user's identifier:
-   #+caption: DEVICE.
+   #+caption: device.
    #+name: tbl:tbl_DEVICE
    |----+-------------+------------------+-------------|
    | id | name        | device_type      | app_user_id |
@@ -163,7 +167,7 @@ The main concepts from the problem's description:
 4. For validation purposes a *many-to-many* relationship was added between
    service and the device's type, so a service like: 'Antivirus for Mac' cannot
    be applied to other device type than 'mac'. The configuration
-   #+caption: SERVICE_IN_DEVICE_TYPE.
+   #+caption: service_in_device_type.
    #+name: tbl:tbl_SERVICE_IN_DEVICE_TYPE
    |------------------+------------------------------|
    | device_type      | service                      |
@@ -188,7 +192,7 @@ The main concepts from the problem's description:
 5. Finally to accomplish one of the requirements a *many-to-many* relationship
    between the service and the device was added. This table also was filled with
    the example provided.
-   #+caption: SERVICE_IN_DEVICE.
+   #+caption: service_in_device.
    #+name: tbl:tbl_SERVICE_IN_DEVICE
    |----------------------+----------------------------|
    | service              | device                     |
@@ -256,7 +260,7 @@ Where:
 - ~<DEVICE_TYPE_NAME>~ :: Is the name of the device's type.
 - ~<DEVICE_TYPE_ID>~ :: Is the device's identifier.
 and the placeholders: ~<DEVICE_TYPE_ID>~ or ~<DEVICE_TYPE_ID>~ only can be
-substituted with the values from the table: [[tbl:tbl_DEVICE_TYPE][DEVICE_TYPE]]
+substituted with the values from the table: [[tbl:tbl_DEVICE_TYPE][device_type]]
 
 If the insertion process is successful. The returned status will be: *201
 Created*, also a JSON will be returned.
