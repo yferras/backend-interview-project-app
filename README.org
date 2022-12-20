@@ -189,8 +189,8 @@ The main concepts from the problem's description:
    Note that, the service: 'Default' is not present in this configuration
    because by default will be applied to all devices registered in the
    application.
-5. Finally to accomplish one of the requirements a *many-to-many* relationship
-   between the service and the device was added. This table also was filled with
+5. Finally to accomplish one of the requirements, a *many-to-many* relationship
+   between the service and the device was added. This table also is filled with
    the example provided.
    #+caption: service_in_device.
    #+name: tbl:tbl_SERVICE_IN_DEVICE
@@ -224,7 +224,7 @@ either the name or its identifier.
 
 You can access to this endpoint with this URL:
 
-http://localhost:8081/v1/device
+~http://localhost:8081/v1/device~
 
 *** Add new devices.
 
@@ -633,7 +633,7 @@ $>
 
 You can access to this endpoint with this URL:
 
-http://localhost:8081/v1/service
+~http://localhost:8081/v1/service~
 
 *** Add new services.
 
@@ -812,7 +812,7 @@ $>
 You can create (or delete) a relationship between services and devices with this
 endpoint:
 
-http://localhost:8081/v1/services/rels/device
+~http://localhost:8081/v1/services/rels/device~
 
 And using a JSON that has the following structure:
 
@@ -974,32 +974,143 @@ E::Device(name = "Linux - 1") Not found.%
 
 ** Total cost per customer.
 
+To obtain the total cost per customer (user) the corresponding endpoint is:
 
-http://localhost:8081/v1/reports/total-per-customer/<ID>
+~http://localhost:8081/v1/reports/customers/<ID>/totals~
 
+Where: ~<ID>~ is the customer's identifier.
 
-TO-DO
+/The app doesn't manage customer. By default all devices are grouped under the
+identifier 0./
 
+If you performs a request to a newly launched application; that is configured as
+described in the example of the section: [[Requirements]]. (See the [[tbl:example_distribution_devices_by_services][table]])
+
+#+begin_src bash
+$> curl -i --location --request GET \
+'http://localhost:8081/v1/reports/customers/0/totals'
+
+HTTP/1.1 200
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Tue, 20 Dec 2022 19:45:21 GMT
+
+{"value":64.0}%
+#+end_src
+
+The formatted JSON:
+
+#+begin_src jsonc
+{
+    "value": 64.0
+}
+#+end_src
+
+The total cost is $64.00, as the example describes.
+
+/WARNING: if you have already made changes to the database; for example add or remove
+services to devices, this result will not be 64.00./
+
+*** Validations.
+
+Requesting for a non-existent customer's identifier.
+
+#+begin_src bash
+$> curl -i --location --request GET \
+'http://localhost:8081/v1/reports/customers/1/totals'
+
+HTTP/1.1 404
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 32
+Date: Tue, 20 Dec 2022 19:48:45 GMT
+
+E::Device(userId = 1) Not found.%
+
+#+end_src
+
+Here the identifier 1 doesn't exist. The status is *$404 Not found*.
 
 ** Using the caches.
 
 There are two caches. One that is pre-loaded when the app is started, and other
-that loads the data on demand.
+that loads the data on demand. The values in the caches are the total cost of
+each device.
 
-Both cache share the same URL:
+Endpoint for the pre-loaded cache:
 
-http://localhost:8081/v1/devices/caches/
+~http://localhost:8081/v1/devices/caches/<DEVICE_ID>~
 
-But the difference to access one or the other is the type of the data. If you
-use the device's identifier you must be accessing the pre-loaded cache; but if
-you use the name of the device (a string) instead you are accessing the cache
-that loads the data on demand.
+Endpoint for the on-demand cache:
 
-Example to get the info
+~http://localhost:8081/v1/devices/caches/<DEVICE_NAME>~
 
 
+Here a equivalent requests that asks for the same value:
 
-TO-DO
+#+begin_src bash
+$> curl -i --location --request GET \
+    'http://localhost:8081/v1/devices/caches/1'
+
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Tue, 20 Dec 2022 20:11:11 GMT
+
+{"deviceId":1,"deviceName":"Mac - 1","currentCost":15.0}%
+#+end_src
+
+#+begin_src bash
+$> curl -i --location --request GET \
+    'http://localhost:8081/v1/devices/caches/Mac%20-%201'
+
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Tue, 20 Dec 2022 20:12:05 GMT
+
+{"deviceId":1,"deviceName":"Mac - 1","currentCost":15.0}%
+#+end_src
+
+/INFO: ~.../Mac%20-%201'~, the %20 is the space in  'Mac - 1'./
+
+JSON:
+
+#+begin_src jsonc
+{
+    "deviceId": 1,
+    "deviceName": "Mac - 1",
+    "currentCost": 15.0
+}
+#+end_src
+
+Where:
+- ~deviceId~ :: Is the device's identifier.
+- ~deviceName~ :: Is the device's name.
+- ~currentCost~ :: Is the current cost.
+
+The current cost will vary depending on the configured services. If you modify the
+services of a particular device, both caches will be updated.
+
+For example, the device: ~Mac - 1~, by default has the services:
+
+1. Antivirus for Mac, $7.00.
+2. Backup, $3.00.
+3. Screen Share, $1.00.
+
+All these services plus the default price ($4.00) applied to all registered
+devices is: $15.00.
+
+If you remove the service Backup from this device, then request again the
+caches, the JSON returned will look like:
+
+#+begin_src jsonc
+{
+    "deviceId": 1,
+    "deviceName": "Mac - 1",
+    "currentCost": 12.0
+}
+#+end_src
+
+
+
 
 
 
