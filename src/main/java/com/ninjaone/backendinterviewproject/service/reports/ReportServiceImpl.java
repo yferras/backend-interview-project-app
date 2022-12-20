@@ -45,9 +45,10 @@ public class ReportServiceImpl implements IReportService {
                 .sum();
 
         Set<Service> defaultServices = serviceRepository.findByApplyToAll(true);
-        for (Service defaultService : defaultServices) {
-            totalCost += defaultService.getPrice() * totalDevicesPerUser;
-        }
+        totalCost += defaultServices.stream()
+                .mapToDouble(defaultService -> defaultService.getPrice() * totalDevicesPerUser)
+                .sum();
+        
         log.info("Total cost for User(id = {}): ${}",
                 userId,
                 totalCost
