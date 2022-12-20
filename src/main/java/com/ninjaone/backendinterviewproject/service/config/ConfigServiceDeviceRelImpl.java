@@ -1,6 +1,5 @@
 package com.ninjaone.backendinterviewproject.service.config;
 
-import com.ninjaone.backendinterviewproject.common.exception.BusinessRuntimeException;
 import com.ninjaone.backendinterviewproject.common.exception.IllegalDataCombinationException;
 import com.ninjaone.backendinterviewproject.common.exception.NoDataException;
 import com.ninjaone.backendinterviewproject.common.validation.IGroupValidation;
@@ -146,7 +145,7 @@ public class ConfigServiceDeviceRelImpl implements IConfigServiceDeviceRelServic
     @Override
     @Transactional
     public ConfigServiceDeviceRelDto createRelationship(ConfigServiceDeviceRelDto configServiceDevice)
-            throws BusinessRuntimeException {
+            {
         configRelationship(configServiceDevice, true);
         return configServiceDevice;
     }
@@ -154,7 +153,7 @@ public class ConfigServiceDeviceRelImpl implements IConfigServiceDeviceRelServic
     @Override
     @Transactional
     public ConfigServiceDeviceRelDto deleteRelationship(ConfigServiceDeviceRelDto configServiceDevice)
-            throws BusinessRuntimeException {
+            {
         configRelationship(configServiceDevice, false);
         return configServiceDevice;
     }

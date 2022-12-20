@@ -1,7 +1,6 @@
 package com.ninjaone.backendinterviewproject.controller.config;
 
 
-import com.ninjaone.backendinterviewproject.common.exception.BusinessRuntimeException;
 import com.ninjaone.backendinterviewproject.dto.ConfigServiceDeviceRelDto;
 import com.ninjaone.backendinterviewproject.service.config.IConfigServiceDeviceRelService;
 import lombok.AllArgsConstructor;
@@ -17,13 +16,13 @@ public class ConfigServiceDeviceRelController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ConfigServiceDeviceRelDto createRelationship(@RequestBody ConfigServiceDeviceRelDto configServiceDevice) throws BusinessRuntimeException {
+    public ConfigServiceDeviceRelDto createRelationship(@RequestBody ConfigServiceDeviceRelDto configServiceDevice) {
         return iConfigServiceDeviceRelService.createRelationship(configServiceDevice);
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
-    public ConfigServiceDeviceRelDto deleteRelationship(@RequestBody ConfigServiceDeviceRelDto configServiceDevice) throws BusinessRuntimeException {
+    public ConfigServiceDeviceRelDto deleteRelationship(@RequestBody ConfigServiceDeviceRelDto configServiceDevice) {
         return iConfigServiceDeviceRelService.deleteRelationship(configServiceDevice);
     }
 }
