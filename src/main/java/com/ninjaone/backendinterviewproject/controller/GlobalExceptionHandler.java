@@ -1,6 +1,5 @@
-package com.ninjaone.backendinterviewproject.controller.config;
+package com.ninjaone.backendinterviewproject.controller;
 
-import com.ninjaone.backendinterviewproject.common.GlobalExceptionHandler;
 import com.ninjaone.backendinterviewproject.common.exception.IllegalDataCombinationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 @Slf4j
-public class ConfigServiceDeviceRelGlobalExceptionHandler extends GlobalExceptionHandler {
+public class GlobalExceptionHandler extends com.ninjaone.backendinterviewproject.common.GlobalExceptionHandler {
 
     @ExceptionHandler(value = IllegalDataCombinationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
@@ -20,6 +19,5 @@ public class ConfigServiceDeviceRelGlobalExceptionHandler extends GlobalExceptio
         log.error("Duplicated Value Exception!!!", exception);
         return exception.getMessage();
     }
-
 
 }
