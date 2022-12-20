@@ -900,7 +900,7 @@ To revert the relationship created in the previous section.
 
 #+begin_src bash
 $> curl -i --location --request DELETE \
-'http://localhost:8081/v1/services/rels/delete/device' \
+'http://localhost:8081/v1/services/rels/device' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "device": "Windows - 2",
@@ -939,7 +939,7 @@ the validation fails will be: *422 Unprocessable entity*.
 
 #+begin_src bash
 $> curl -i --location --request DELETE \
-'http://localhost:8081/v1/services/rels/delete/device' \
+'http://localhost:8081/v1/services/rels/device' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "device": "",
@@ -957,7 +957,7 @@ Also non-existent data will be validated, the status will be: *404 Not found*.
 
 #+begin_src bash
 $> curl -i --location --request POST \
-'http://localhost:8081/v1/services/rels/delete/device' \
+'http://localhost:8081/v1/services/rels/device' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "device": "Linux - 1",
