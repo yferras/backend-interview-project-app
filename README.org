@@ -19,6 +19,7 @@ Breakdown of Service costs by Device Type:
 
 #+caption: Services and costs
 #+name: tbl:services_cost_per_device_type
+#+attr_html: :align center
 |-----------------------|---------------|
 | Type                  | Price         |
 |-----------------------|---------------|
@@ -52,6 +53,7 @@ Devices have the following properties:
      Customer with 2 Windows and 3 Macs, with the following Services:
      #+caption: Distribution of the devices by services.
      #+name: tbl:example_distribution_devices_by_services
+     #+attr_html: :align center
      |-------------+-----------+--------+--------------|
      | Device Type | Antivirus | Backup | Screen Share |
      |-------------+-----------+--------+--------------|
@@ -63,6 +65,7 @@ Devices have the following properties:
      *Total Cost:* $64
 
      Explanation:
+     #+attr_html: :align center
      |--------------+---------------------------+----------|
      | Category     | Description               | Cost ($) |
      |--------------+---------------------------+----------|
@@ -91,7 +94,7 @@ Before running the application, You must be installed:
 
 To run the application You must clone the repository. In a terminal execute:
 
-#+begin_src bash
+#+begin_src shell
 $> git clone https://github.com/yferras/backend-interview-project-app.git
 #+end_src
 
@@ -99,13 +102,13 @@ After cloning the repository get into the new folder:
 *backend-interview-project-app*.
 
 
-#+begin_src bash
+#+begin_src shell
 $> cd backend-interview-project-app
 #+end_src
 
 Finally, to run the application:
 
-#+begin_src bash
+#+begin_src shell
 $> gradle bootRun
 #+end_src
 
@@ -117,13 +120,14 @@ with the data provided as the basis for carrying out this exercise.
 
 The main concepts from the problem's description:
 
-#+caption: Entity relationship diagram.
+#+caption: Entity Relationship Diagram.
 #+name: img:er_diagram
-[[./doc/img/entity relationship diagram.png]]
+[[doc/img/entity-relationship-diagram.png]]
 
 1. device's type, has a unique name and identifier:
    #+caption: device_type.
    #+name: tbl:tbl_DEVICE_TYPE
+   #+attr_html: :align center
    |----+---------|
    | id | name    |
    |----+---------|
@@ -138,6 +142,7 @@ The main concepts from the problem's description:
    service apply to all device by default.
    #+caption: service.
    #+name: tbl:tbl_SERVICE
+   #+attr_html: :align center
    |----+-----------------------+-------+--------------|
    | id | name                  | price | apply_to_all |
    |----+-----------------------+-------+--------------|
@@ -153,6 +158,7 @@ The main concepts from the problem's description:
    as the user's identifier:
    #+caption: device.
    #+name: tbl:tbl_DEVICE
+   #+attr_html: :align center
    |----+-------------+------------------+-------------|
    | id | name        | device_type      | app_user_id |
    |----+-------------+------------------+-------------|
@@ -169,6 +175,7 @@ The main concepts from the problem's description:
    be applied to other device type than 'mac'. The configuration
    #+caption: service_in_device_type.
    #+name: tbl:tbl_SERVICE_IN_DEVICE_TYPE
+   #+attr_html: :align center
    |------------------+------------------------------|
    | device_type      | service                      |
    |------------------+------------------------------|
@@ -194,6 +201,7 @@ The main concepts from the problem's description:
    the example provided.
    #+caption: service_in_device.
    #+name: tbl:tbl_SERVICE_IN_DEVICE
+   #+attr_html: :align center
    |----------------------+----------------------------|
    | service              | device                     |
    |----------------------+----------------------------|
@@ -231,7 +239,7 @@ You can access to this endpoint with this URL:
 To store new devices, you can use the *POST* method and describe the device's
 data in JSON format.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -244,7 +252,7 @@ $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 
 Alternatively (and also equivalent to the last command).
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -260,12 +268,12 @@ Where:
 - ~<DEVICE_TYPE_NAME>~ :: Is the name of the device's type.
 - ~<DEVICE_TYPE_ID>~ :: Is the device's identifier.
 and the placeholders: ~<DEVICE_TYPE_ID>~ or ~<DEVICE_TYPE_ID>~ only can be
-substituted with the values from the table: [[tbl:tbl_DEVICE_TYPE][device_type]]
+substituted with the values from the table: [[tbl:tbl_DEVICE_TYPE][device_type]].
 
 If the insertion process is successful. The returned status will be: *201
 Created*, also a JSON will be returned.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -317,7 +325,7 @@ And if it is used, a validation error it will be returned in conjunction with th
 status *422 Unprocessable entity*. This behavior is to prevent any non-existent data
 combinations. Let's test it:
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -370,7 +378,7 @@ Found* (e.g.: the supplied values for: ~<DEVICE_TYPE_ID>~ or
 additionally comes the valid combinations that you can use to fix the problem.
 See:
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -391,7 +399,7 @@ $>
 
 The same happens if you provied a non-existent value for ~deviceType.name~.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -415,7 +423,7 @@ Other validations performed:
 - ~deviceType~ cannot be null. The status returned in these cases: *422
   Unprocessable Entity*. In the next command, the property will be omitted.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -450,7 +458,7 @@ The JSON returned:
 - ~name~ cannot be neither null, neither empty nor blank string. The status
   returned in these cases is: *422 Unprocessable entity*.
   - Null value:
-    #+begin_src bash
+    #+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -486,7 +494,7 @@ The JSON returned:
 #+end_src
 
   - Empty string:
- #+begin_src bash
+ #+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -522,7 +530,7 @@ The JSON returned:
 #+end_src
 
   - Blank string:
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -559,7 +567,7 @@ The JSON returned:
 
 
 - The device name is unique in the database. Let's use a name that has already been used.
-  #+begin_src bash
+  #+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/devices' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -584,7 +592,7 @@ $>
 To delete a specific device, you can use its identifier and calling the *DELETE*
 method on the endpoint. As shown below:
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request DELETE 'http://localhost:8081/v1/devices/<ID>'
 #+end_src
 
@@ -595,7 +603,7 @@ the status code must be *200 OK*, and nothing is printed in the terminal.
 
 Let's delete the device with identifier 1.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request DELETE 'http://localhost:8081/v1/devices/1'
 HTTP/1.1 200
 Content-Length: 0
@@ -609,7 +617,7 @@ the terminal. The status will be: *404 Not Found*.
 
 Let's execute the last command again.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request DELETE 'http://localhost:8081/v1/devices/1'
 HTTP/1.1 404
 Content-Type: text/plain;charset=UTF-8
@@ -624,7 +632,7 @@ WARNING: if you delete some data the subsequent results will be affected. If
 that case happens you could stop the server by pressing ~Ctrl + C~ where the
 server is running and then repeat the command:
 
-#+begin_src bash
+#+begin_src shell
 $> gradle bootRun
 $>
 #+end_src
@@ -640,7 +648,7 @@ You can access to this endpoint with this URL:
 To store new services, you can use the *POST* method and describe the device's
 data in JSON format.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/services' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -657,7 +665,7 @@ If the data provided is valid and the insertion process is successful, the
 returned status will be: *201 Created*. In addition the inserted service will be
 returned as JSON.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/services' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -692,7 +700,7 @@ For this endpoint the validations are:
   to the validations in the ~name~ of the Device.
 - ~price~ also cannot be null, or a value less than 0.0.
   - Null:
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST 'http://localhost:8081/v1/services' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -724,7 +732,7 @@ The JSON returned:
 
   - Less than 0.0:
 
-#+begin_src bash
+#+begin_src shell
 curl -i --location --request POST 'http://localhost:8081/v1/services' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -761,7 +769,7 @@ The JSON returned:
 To delete a specific service, you can use its identifier and calling the *DELETE*
 method on the endpoint. As shown below:
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request DELETE 'http://localhost:8081/v1/services/<ID>'
 #+end_src
 
@@ -772,7 +780,7 @@ the status code must be *200 OK*, and nothing is printed in the terminal.
 
 Let's delete the service with identifier 1.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request DELETE 'http://localhost:8081/v1/services/1'
 HTTP/1.1 200
 Content-Length: 0
@@ -786,7 +794,7 @@ the terminal. The status will be: *404 Not Found*.
 
 Let's execute the last command again.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request DELETE 'http://localhost:8081/v1/services/1'
 HTTP/1.1 404
 Content-Type: text/plain;charset=UTF-8
@@ -801,7 +809,7 @@ WARNING: if you delete some data the subsequent results will be affected. If
 that case happens you could stop the server by pressing ~Ctrl + C~ where the
 server is running and then repeat the command:
 
-#+begin_src bash
+#+begin_src shell
 $> gradle bootRun
 $>
 #+end_src
@@ -859,7 +867,7 @@ Where:
 With this example we are creating a relationship between: 'Backup' and
 'Windows - 2':
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST \
 'http://localhost:8081/v1/services/rels/device' \
 --header 'Content-Type: application/json' \
@@ -898,7 +906,7 @@ created.
 
 To revert the relationship created in the previous section.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request DELETE \
 'http://localhost:8081/v1/services/rels/device' \
 --header 'Content-Type: application/json' \
@@ -937,7 +945,7 @@ For this endpoint the validations are similar to the previous endpoints.
 None of the fields cannot be null neither empty nor blank string. The status if
 the validation fails will be: *422 Unprocessable entity*.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request DELETE \
 'http://localhost:8081/v1/services/rels/device' \
 --header 'Content-Type: application/json' \
@@ -955,7 +963,7 @@ Date: Mon, 19 Dec 2022 19:10:31 GMT
 
 Also non-existent data will be validated, the status will be: *404 Not found*.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request POST \
 'http://localhost:8081/v1/services/rels/device' \
 --header 'Content-Type: application/json' \
@@ -986,7 +994,7 @@ identifier 0./
 If you performs a request to a newly launched application; that is configured as
 described in the example of the section: [[Requirements.]] (See the [[tbl:example_distribution_devices_by_services][table]])
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request GET \
 'http://localhost:8081/v1/reports/customers/0/totals'
 
@@ -1015,7 +1023,7 @@ services to devices, this result will not be 64.00./
 
 Requesting for a non-existent customer's identifier.
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request GET \
 'http://localhost:8081/v1/reports/customers/1/totals'
 
@@ -1047,7 +1055,7 @@ Endpoint for the on-demand cache:
 
 Here a equivalent requests that asks for the same value:
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request GET \
     'http://localhost:8081/v1/devices/caches/1'
 
@@ -1058,7 +1066,7 @@ Date: Tue, 20 Dec 2022 20:11:11 GMT
 {"deviceId":1,"deviceName":"Mac - 1","currentCost":15.0}%
 #+end_src
 
-#+begin_src bash
+#+begin_src shell
 $> curl -i --location --request GET \
     'http://localhost:8081/v1/devices/caches/Mac%20-%201'
 

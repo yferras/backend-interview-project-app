@@ -1,0 +1,26 @@
+#+title: Restclient delete device
+#+author: Yeinier Ferrás Cecilio
+
+
+# GLOBAL VARS
+:root-url = http://localhost:8081
+
+#################################################################
+#                       Endpoints: Devices.                     #
+#################################################################
+:endpoint-devices = :root-url/v1/devices
+#
+#
+# Remove devices.
+#
+# OK
+:device-id = 1
+#
+DELETE  :endpoint-devices/:device-id
+#
+#
+# Not Found
+:device-id = -100
+#
+DELETE  :endpoint-devices/:device-id
+#################################################################

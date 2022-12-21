@@ -1,0 +1,102 @@
+#+title: Restclient add service
+#+author: Yeinier Ferrás Cecilio
+
+
+
+# GLOBAL VARS
+:root-url = http://localhost:8081
+:h-cont-tp-json = Content-Type: application/json
+
+#################################################################
+#                       Endpoints: Services.                    #
+#################################################################
+:endpoint-services = :root-url/v1/services
+#
+#
+# Add new service.
+#
+#
+#############################################
+#       No duplication allowed.
+:service-json-value = <<
+{
+    "name": "monitoring",
+    "price": 10.50
+}
+#
+POST :endpoint-services
+:h-cont-tp-json
+
+:service-json-value
+#############################################
+# VALIDATION.
+#   $.price = null --> cannot be null
+:service-json-value = <<
+{
+    "name": "monitoring"
+}
+#
+POST :endpoint-services
+:h-cont-tp-json
+
+:service-json-value
+
+
+#############################################
+# VALIDATION.
+#   $.price = -5.00 --> cannot be less than 0.0.
+:service-json-value = <<
+{
+    "name": "monitoring",
+    "price": -5.00
+}
+#
+POST :endpoint-services
+:h-cont-tp-json
+
+:service-json-value
+
+
+
+#############################################
+# VALIDATION.
+#   $.name = null --> cannot be null
+:service-json-value = <<
+{
+    "price": 15.00
+}
+#
+POST :endpoint-services
+:h-cont-tp-json
+
+:service-json-value
+
+
+#############################################
+# VALIDATION.
+#   $.name = "" --> cannot be an empty or blank string.
+:service-json-value = <<
+{
+    "name": "",
+    "price": 15.00
+}
+#
+POST :endpoint-services
+:h-cont-tp-json
+
+:service-json-value
+
+
+#############################################
+# VALIDATION.
+#   $.name = "    " --> cannot be an empty or blank string.
+:service-json-value = <<
+{
+    "name": "    ",
+    "price": 15.00
+}
+#
+POST :endpoint-services
+:h-cont-tp-json
+
+:service-json-value

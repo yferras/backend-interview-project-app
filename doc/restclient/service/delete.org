@@ -1,0 +1,26 @@
+#+title: Restclient delete service
+#+author: Yeinier Ferrás Cecilio
+
+
+# GLOBAL VARS
+:root-url = http://localhost:8081
+
+#################################################################
+#                       Endpoints: Services.                     #
+#################################################################
+:endpoint-services = :root-url/v1/services
+#
+#
+# Remove services.
+#
+# OK
+:service-id = 1
+#
+DELETE  :endpoint-services/:service-id
+#
+#
+# Not Found
+:service-id = -100
+#
+DELETE  :endpoint-services/:service-id
+#################################################################

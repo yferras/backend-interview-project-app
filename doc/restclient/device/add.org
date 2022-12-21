@@ -1,0 +1,201 @@
+#+title: Restclient add device
+#+author: Yeinier Ferrás Cecilio
+
+
+
+# GLOBAL VARS
+:root-url = http://localhost:8081
+:h-cont-tp-json = Content-Type: application/json
+
+#################################################################
+#                       Endpoints: Devices.                     #
+#################################################################
+:endpoint-devices = :root-url/v1/devices
+#
+#
+# Add new devices.
+#
+#
+#############################################
+#       No duplication allowed.
+:device-json-value = <<
+{
+    "name": "Linux - 1",
+    "deviceType": {
+        "name": "linux"
+    }
+}
+#
+POST :endpoint-devices
+:h-cont-tp-json
+
+:device-json-value
+#############################################
+# VALIDATION.
+#     $.deviceType.id =   1       --> defined at the same time
+#     $.deviceType.name = "linux" <--
+:device-json-value = <<
+{
+    "name": "Linux - 1",
+    "deviceType": {
+        "id":   1,
+        "name": "linux"
+    }
+}
+#
+POST :endpoint-devices
+:h-cont-tp-json
+
+:device-json-value
+
+
+#############################################
+# VALIDATION.
+#   $.deviceType.id = -100 --> non-existent
+:device-json-value = <<
+{
+    "name": "Linux - 1",
+    "deviceType": {
+        "id":   -100
+    }
+}
+#
+POST :endpoint-devices
+:h-cont-tp-json
+
+:device-json-value
+
+
+#############################################
+# VALIDATION.
+#   $.deviceType.name = "bsd" --> non-existent
+:device-json-value = <<
+{
+    "name": "Linux - 1",
+    "deviceType": {
+        "name": "bsd"
+    }
+}
+#
+POST :endpoint-devices
+:h-cont-tp-json
+
+:device-json-value
+
+
+#############################################
+# VALIDATION.
+#   $.deviceType = null --> cannot be null
+:device-json-value = <<
+{
+    "name": "Linux - 1"
+}
+#
+POST :endpoint-devices
+:h-cont-tp-json
+
+:device-json-value
+
+
+#############################################
+# VALIDATION.
+#   $.name = null --> cannot be null
+:device-json-value = <<
+{
+    "name": null,
+    "deviceType": {
+        "id": 1
+    }
+}
+#
+POST :endpoint-devices
+:h-cont-tp-json
+
+:device-json-value
+
+
+#############################################
+# VALIDATION.
+#   $.name = "" --> cannot be an empty string.
+:device-json-value = <<
+{
+    "name": "",
+    "deviceType": {
+        "id": 1
+    }
+}
+#
+POST :endpoint-devices
+:h-cont-tp-json
+
+:device-json-value
+
+
+#############################################
+# VALIDATION.
+#   $.name = "    " --> cannot be an empty string.
+:device-json-value = <<
+{
+    "name": "    ",
+    "deviceType": {
+        "id": 1
+    }
+}
+#
+POST :endpoint-devices
+:h-cont-tp-json
+
+:device-json-value
+
+
+#############################################
+# VALIDATION.
+#   $.name = "    " --> cannot be an empty string.
+:device-json-value = <<
+{
+    "name": "    ",
+    "deviceType": {
+        "id": 1
+    }
+}
+#
+POST :endpoint-devices
+:h-cont-tp-json
+
+:device-json-value
+
+
+#############################################
+# VALIDATION.
+#   $.deviceType.id = null --> only one of the fields: 'id' or 'name' is required.
+:device-json-value = <<
+{
+    "name": "Linux - 1",
+    "deviceType": {
+        "id": null
+    }
+}
+#
+POST :endpoint-devices
+:h-cont-tp-json
+
+:device-json-value
+
+
+#############################################
+# VALIDATION.
+#   $.deviceType.name = null --> only one of the fields: 'id' or 'name' is required.
+:device-json-value = <<
+{
+    "name": "Linux - 1",
+    "deviceType": {
+        "name": null
+    }
+}
+#
+POST :endpoint-devices
+:h-cont-tp-json
+
+:device-json-value
+
+#################################################################

@@ -1,0 +1,58 @@
+#+title: Entity Relationship Diagram
+#+author: Yeinier Ferrás Cecilio.
+#+LANGUAGE: en
+
+
+
+#+begin_src plantuml :file img/entity-relationship-diagram.png
+
+@startuml
+
+hide circle
+
+entity device_type #palegreen ##green {
+        ,* <&key>id : number <<generated>>
+        --
+        ,* name : text <<unique>>
+}
+
+entity device #palegreen ##green {
+        ,* <&key>id : number <<generated>>
+        --
+        ,* name : text <<unique>>
+        ,* device_type_id : number <<FK>>
+}
+
+entity service #palegreen ##green {
+        ,* <&key>id : number <<generated>>
+        --
+        ,* name : text <<unique>>
+        ,* price: decimal
+        ,* apply_to_all: boolean
+}
+
+entity service_in_device_type ##[dashed] {
+        ,* <&key>device_type_id  : number <<FK>>
+        ,* <&key>service_id : number <<FK>>
+        --
+}
+
+entity service_in_device ##[dashed] {
+        ,* <&key>device_id  : number <<FK>>
+        ,* <&key>service_id : number <<FK>>
+        --
+}
+
+device_type ||--o{ device
+device_type ||--o{ service_in_device_type
+service ||--o{ service_in_device_type
+service ||--o{ service_in_device
+device ||--o{ service_in_device
+
+
+@enduml
+
+#+end_src
+
+#+RESULTS:
+[[file:img/entity-relationship-diagram.png]]

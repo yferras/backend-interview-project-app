@@ -1,0 +1,26 @@
+#+title: Get Customer Total Cost
+#+author: Yeinier Ferrás Cecilio
+
+
+# GLOBAL VARS
+:root-url = http://localhost:8081
+
+#################################################################
+#                       Endpoints: Reports.                     #
+#################################################################
+:endpoint-reports = :root-url/v1/reports/customers/:customer-id/totals
+#
+#
+# Remove services.
+#
+# OK
+:customer-id = 0
+#
+GET  :endpoint-reports
+#
+#
+# Not Found
+:customer-id = -100
+#
+GET  :endpoint-reports
+#################################################################

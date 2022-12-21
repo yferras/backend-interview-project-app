@@ -1,0 +1,26 @@
+#+title: On Demand Cache
+#+author: Yeinier Ferrás Cecilio
+
+
+# GLOBAL VARS
+:root-url = http://localhost:8081
+
+#################################################################
+#                       Endpoints: Reports.                     #
+#################################################################
+:endpoint-caches = :root-url/v1/devices/caches/:device-name
+#
+#
+# Remove services.
+#
+# OK
+:device-name = Windows - 1
+#
+GET  :endpoint-caches
+#
+#
+# Not Found
+:device-name = Linux - 1
+#
+GET  :endpoint-caches
+#################################################################

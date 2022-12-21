@@ -1,0 +1,268 @@
+#+title: Restclient remove services from devices
+#+author: Yeinier Ferrás Cecilio
+
+
+
+# GLOBAL VARS
+:root-url = http://localhost:8081
+:h-cont-tp-json = Content-Type: application/json
+
+#################################################################
+#                       Endpoints: Devices.                     #
+#################################################################
+:endpoint-serv-rels-dev = :root-url/v1/services/rels/device
+#
+#
+# Delete relationships between services-devices.
+#
+#
+#############################################
+# OK
+#   $.device : string = "Windows - 2"
+#   $.service : string = "Backup"
+:relationship-json-value = <<
+{
+    "device" : "Windows - 2",
+    "service" : "Backup"
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+
+#############################################
+# OK
+#   $.device : number = 3 --> Mac - 3
+#   $.service : numbber = 4 --> Backup
+:relationship-json-value = <<
+{
+    "device" : 3,
+    "service" : 4
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+
+#############################################
+# OK
+#   $.device : string = "Mac - 2"
+#   $.service : numbber = 5 --> Screen Share
+:relationship-json-value = <<
+{
+    "device" : "Mac - 2",
+    "service" : 5
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+
+#############################################
+# OK
+#   $.device : numbber = 4 --> Windows - 1
+#   $.service : string = "Screen Share"
+:relationship-json-value = <<
+{
+    "device" : 4,
+    "service" : "Screen Share"
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+
+#############################################
+# VALIDATION
+#   $.device : string = "PC - 1" --> non-existent data
+#   $.service : string = "Backup"
+:relationship-json-value = <<
+{
+    "device" : "PC - 1",
+    "service" : "Backup"
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+
+#############################################
+# VALIDATION
+#   $.device : string = "Mac - 1"
+#   $.service : string = "monitoring"  --> non-existent data
+:relationship-json-value = <<
+{
+    "device" : "Mac - 1",
+    "service" : "monitoring"
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+#############################################
+# VALIDATION
+#   $.device : string = "PC - 1" --> non-existent data
+#   $.service : string = "Backup"
+:relationship-json-value = <<
+{
+    "device" : "PC - 1",
+    "service" : "Backup"
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+
+#############################################
+# VALIDATION
+#   $.device : string = "Mac - 1"
+#   $.service : string = "monitoring"  --> non-existent data
+:relationship-json-value = <<
+{
+    "device" : "Mac - 1",
+    "service" : "monitoring"
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+#############################################
+# VALIDATION
+#   $.device : number = -100 --> non-existent data
+#   $.service : string = "Backup"
+:relationship-json-value = <<
+{
+    "device" : -100,
+    "service" : "Backup"
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+
+#############################################
+# VALIDATION
+#   $.device : string = "Mac - 1"
+#   $.service : number = -100  --> non-existent data
+:relationship-json-value = <<
+{
+    "device" : "Mac - 1",
+    "service" : -100
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+
+#############################################
+# VALIDATION
+#   $.device : string = "Mac - 1"
+#   $.service = null --> cannot be null.
+:relationship-json-value = <<
+{
+    "device" : "Mac - 1",
+    "service" : null
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+
+#############################################
+# VALIDATION
+#   $.device : string = null --> cannot be null.
+#   $.service = "Backup"
+:relationship-json-value = <<
+{
+    "device" : null,
+    "service" : "Backup"
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+#############################################
+# VALIDATION
+#   $.device : string = "Mac - 1"
+#   $.service = "" --> Cannot be an empty string.
+:relationship-json-value = <<
+{
+    "device" : "Mac - 1",
+    "service" : ""
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+
+#############################################
+# VALIDATION
+#   $.device : string = "" --> Cannot be an empty string.
+#   $.service = "Backup"
+:relationship-json-value = <<
+{
+    "device" : "",
+    "service" : "Backup"
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+#############################################
+# VALIDATION
+#   $.device : string = "Mac - 1"
+#   $.service = "   " --> Cannot be an empty string.
+:relationship-json-value = <<
+{
+    "device" : "Mac - 1",
+    "service" : "   "
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+
+#############################################
+# VALIDATION
+#   $.device : string = "   " --> Cannot be an empty string.
+#   $.service = "Backup"
+:relationship-json-value = <<
+{
+    "device" : "  ",
+    "service" : "Backup"
+}
+#
+DELETE :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
