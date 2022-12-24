@@ -315,12 +315,49 @@ Respuesta:
 
 ** Reportes: Costo total por usuario
 
-/v1/devices
+#+attr_html: :align left
+Solicitud (~GET~):
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+begin_src restclient
+GET http://localhost:8081/v1/reports/customers/0/totals
+#+end_src
+#+REVEAL_HTML: </div>
+
+#+attr_html: :align left
+Respuesta:
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+ATTR_REVEAL: :frag (appear)
+#+BEGIN_SRC jsonc
+{
+  "value": 64.0
+}
+// HTTP/1.1 200
+// Request duration: 0.031381s
+#+END_SRC
 
 ** Cache: Costo total por dispositivo
 
-/v1/devices
+#+attr_html: :align left
+Solicitud (~GET~):
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+begin_src restclient
+GET http://localhost:8081/v1/devices/caches/1
+#+end_src
+#+REVEAL_HTML: </div>
 
+#+attr_html: :align left
+Respuesta:
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+ATTR_REVEAL: :frag (appear)
+#+BEGIN_SRC jsonc
+{
+  "deviceId": 1,
+  "deviceName": "Mac - 1",
+  "currentCost": 15.0
+}
+// HTTP/1.1 200
+// Request duration: 0.014333s
+#+END_SRC
 
 * Patrones
 

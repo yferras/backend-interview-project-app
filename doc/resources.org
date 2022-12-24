@@ -1,0 +1,39 @@
+#+title: Resources
+
+
+
+* Database
+
+#+begin_src plantuml :file img/resources-database.png
+
+@startuml
+!theme bluegray
+skinparam backgroundcolor transparent
+package Database <<Database>> {
+
+}
+
+@enduml
+
+#+end_src
+
+#+RESULTS:
+[[file:img/resources-database.png]]
+
+* PC
+
+#+begin_src plantuml :file img/resources-monitor.png
+
+@startuml
+!theme bluegray
+skinparam backgroundcolor transparent
+
+title: <size:100><&monitor></size>
+
+@enduml
+
+#+end_src
+
+#+RESULTS:
+
+[[file:img/resources-monitor.png]]

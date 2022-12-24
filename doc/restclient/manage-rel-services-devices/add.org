@@ -266,3 +266,21 @@ POST :endpoint-serv-rels-dev
 :h-cont-tp-json
 
 :relationship-json-value
+
+
+#+begin_src restclient
+:root-url = http://localhost:8081
+:h-cont-tp-json = Content-Type: application/json
+:endpoint-serv-rels-dev = :root-url/v1/services/rels/device
+:relationship-json-value = <<
+{
+    "device" : "  ",
+    "service" : "Backup"
+}
+#
+POST :endpoint-serv-rels-dev
+:h-cont-tp-json
+
+:relationship-json-value
+
+#+end_src

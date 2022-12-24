@@ -60,7 +60,7 @@ Devices have the following properties:
      | Windows     |         2 |      1 |            2 |
      | Mac         |         3 |      2 |            2 |
      |-------------+-----------+--------+--------------|
-     | *Total ($)* |   *31.00* | *9.00* |       *4.00* |
+     | *Total ($)*   |     *31.00* |   *9.00* |         *4.00* |
      |-------------+-----------+--------+--------------|
      *Total Cost:* $64
 
@@ -74,7 +74,7 @@ Devices have the following properties:
      | Backup       | (1W + 2M) X 3.00          |     9.00 |
      | Screen share | (2W + 2M) X 1.00          |     4.00 |
      |--------------+---------------------------+----------|
-     |              | *Total ($)*               |  *64.00* |
+     |              | *Total ($)*                 |    *64.00* |
      |--------------+---------------------------+----------|
 
 3. Implement a rudimentary cache for the calculation per device. Note that the
@@ -122,7 +122,8 @@ The main concepts from the problem's description:
 
 #+caption: Entity Relationship Diagram.
 #+name: img:er_diagram
-[[doc/img/entity-relationship-diagram.png]]
+#+attr_html: :align center
+[[./doc/img/entity-relationship-diagram.png]]
 
 1. device's type, has a unique name and identifier:
    #+caption: device_type.

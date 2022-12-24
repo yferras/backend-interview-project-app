@@ -7,7 +7,9 @@
 #+begin_src plantuml :file img/entity-relationship-diagram.png
 
 @startuml
-
+scale 1.75
+!theme carbon-gray
+skinparam backgroundcolor transparent
 hide circle
 
 entity device_type #palegreen ##green {
@@ -21,6 +23,7 @@ entity device #palegreen ##green {
         --
         ,* name : text <<unique>>
         ,* device_type_id : number <<FK>>
+        ,* user_id : number
 }
 
 entity service #palegreen ##green {
@@ -49,6 +52,7 @@ service ||--o{ service_in_device_type
 service ||--o{ service_in_device
 device ||--o{ service_in_device
 
+hide members
 
 @enduml
 

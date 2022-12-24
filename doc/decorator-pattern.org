@@ -1,0 +1,83 @@
+#+title: Decorator Pattern
+#+author: Yeinier Ferrás Cecilio.
+#+LANGUAGE: en
+
+
+
+#+begin_src plantuml :file img/decorator-pattern-definition.png
+
+@startuml
+!theme carbon-gray
+skinparam backgroundcolor transparent
+hide circle
+together {
+	class Client
+	note left
+	c = new ConcreteComponent();
+	d1 = new ConcreteDecorator1(c);
+	d2 = new ConcreteDecorator2(d1);
+	d3 = new ConcreteDecorator3(d2);
+	d3.execute();
+	end note
+
+	interface Component <<interface>>
+	{
+	        + execute()
+	}
+}
+
+class ConcreteComponent {
+        ...
+        + execute()
+}
+class BaseDecorator {
+        - wrappee : Component
+        + BaseDecorator(c : Component)
+        + execute()
+}
+note left of BaseDecorator::BaseDecorator
+wrappee = c;
+end note
+note left of BaseDecorator::execute
+wrappee.execute();
+end note
+
+class ConcreteDecorator1 {
+        ...
+        + execute()
+        + extra()
+}
+note right of ConcreteDecorator1::execute
+<b>super</b>::execute();
+extra();
+end note
+
+class ConcreteDecorator2 {
+        ...
+        + execute()
+        + extra()
+}
+
+class ConcreteDecorator3 {
+        ...
+        + execute()
+        + extra()
+}
+
+
+Client --> Component
+Component <|..ConcreteComponent
+Component <|..BaseDecorator
+Component <--o BaseDecorator
+BaseDecorator <|-- ConcreteDecorator1
+BaseDecorator <|-- ConcreteDecorator2
+BaseDecorator <|-- ConcreteDecorator3
+
+hide Component fields
+hide Client members
+@enduml
+
+#+end_src
+
+#+RESULTS:
+[[file:img/decorator-pattern-definition.png]]
