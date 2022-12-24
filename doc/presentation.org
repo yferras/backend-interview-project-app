@@ -1,0 +1,352 @@
+# Local IspellDict: es
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2022 Yeinier Ferrás Cecilio
+
+:REVEAL_PROPERTIES:
+#+OPTIONS: toc:nil ^:{} num:nil timestamp:nil toc:1
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_REVEAL_JS_VERSION: 4
+#+REVEAL_THEME: moon
+#+REVEAL_: true
+#+REVEAL_INIT_OPTIONS: slideNumber:true
+:END:
+
+# Configure individual pieces of information.
+#+Title: RMM
+#+Subtitle: Desafío de código
+#+Author: Yeinier Ferrás Cecilio
+#+LANGUAGE: es
+
+#+MACRO: color @@html:<font color="$1">$2</font>@@
+
+* Introducción
+** El problema
+
+Crear una plataforma de Administración y Monitoreo Remota (RMM, por sus siglas
+en inglés).
+
+** Requerimientos (1 de 3)
+
++ Modelo de datos para persistir la información de los dispositivos y los
+   servicios
+
+** Requerimientos (2 de 3)
+
++ Implementar los endpoints:
+  #+ATTR_REVEAL: :frag (appear)
+  1. Dispositivos. (*)
+  2. Servicios. (*)
+  3. Relaciones entre Dispositivos y Servicios. (*)
+  4. Calcular el costo total de todos los dispositivos según los servicios
+     asociados.
+#+ATTR_REVEAL: :frag (appear)
+(*) Para todos los endpoints solo se implementan adicionar y eliminar.
+
+** Requerimientos (3 de 3)
+
++ Implementar una cache básica para el costo de un dispositivo en particular.
+
+  (La cache debe de re-evaluarse cada vez que se adicione/elimine un servicio
+  del dispositivo)
+
+
+* Base de datos
+
+[[file:img/resources-database.png]]
+
+** Tabla: Tipo de Dispositivo
+|    | Columna | Tipo |
+|----+---------+------|
+| 🔑 | id      | num  |
+|    | name    | text |
+
+** Tabla: Dispositivo
+|    | Columna        | Tipo  |
+|----+----------------+-------|
+| 🔑 | id             | num   |
+|    | name           | text  |
+|    | device_type_id | num   |
+|    | user_id        | num   |
+
+** Tabla: Servicio
+|    | Columna      | Tipo |
+|----+--------------+------|
+| 🔑 | id           | num  |
+|    | name         | text |
+|    | price        | num  |
+|    | apply_to_all | bool |
+
+** Diagrama Entidad-Relación
+#+ATTR_HTML:  :align center
+[[./img/entity-relationship-diagram.png]]
+
+** Tabla: Servicio en Tipo de Dispositivo
+|    | Columna        | Tipo |
+|----+----------------+------|
+| 🔑 | device_type_id | num  |
+| 🔑 | service_id     | num  |
+
+Permite configurar la relación entre servicios que son específicos a un tipo de
+dispositivo.
+
+(Antivirus para Mac, solo para dispositivos de tipo Mac)
+(Antivirus para Windows, solo para dispositivos de tipo Windows)
+
+** Tabla: Servicio en Dispositivo
+|    | Columna    | Tipo |
+|----+------------+------|
+| 🔑 | device_id  | num  |
+| 🔑 | service_id | num  |
+
+
+* Ejecutar la aplicación
+
+[[file:img/resources-monitor.png]]
+
+** Pre-requisitos
+Antes de ejecutar la aplicación es necesario tener las siguientes aplicaciones
+instaladas en el sistema operativo.
+#+ATTR_REVEAL: :frag (appear)
+1. Máquina Virtual de Java, versión 11 o superior.
+2. Gradle, versión 7.2.
+3. Git.
+4. cUrl o Postman.
+
+** Clonar el repositorio
+
+#+begin_src shell
+git clone https://github.com/yferras/backend-interview-project-app.git
+#+end_src
+
+
+#+begin_src shell
+cd backend-interview-project-app
+#+end_src
+
+** Ejecutar
+
+#+begin_src shell
+gradle bootRun
+#+end_src
+
+#+caption: Servidor ejecutándose.
+#+name: fig:server-running-terminal-output
+#+ATTR_HTML: :width 90% :align center
+[[file:img/server-running-terminal-output.png]]
+
+
+* Usando los Endpoints
+
+http://localhost:8081
+
+** Servicios
+
+Recurso: {{{color(#98ff98,/v1/services)}}}
+
+*** Adicionar nuevo Servicio
+
+#+attr_html: :align left
+Solicitud (~POST~):
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+begin_src restclient
+POST http://localhost:8081/v1/services
+Content-Type: application/json
+{
+    "name": "monitoring",
+    "price": 10.50
+}
+#+end_src
+#+REVEAL_HTML: </div>
+
+#+attr_html: :align left
+Respuesta:
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+ATTR_REVEAL: :frag (appear)
+#+BEGIN_SRC jsonc
+{
+    "id": 6,
+    "name": "monitoring",
+    "price": 10.5
+}
+// HTTP/1.1 201
+// Content-Type: application/json
+// Request duration: 0.225037s
+#+END_SRC
+#+REVEAL_HTML: </div>
+
+*** Eliminar un Servicio
+
+#+attr_html: :align left
+Solicitud (~DELETE~):
+#+begin_src restclient
+DELETE http://localhost:8081/v1/services/6
+#+end_src
+
+#+attr_html: :align left
+Respuesta:
+#+ATTR_REVEAL: :frag (appear)
+#+BEGIN_SRC js
+// HTTP/1.1 200
+// Request duration: 0.030906s
+#+END_SRC
+
+** Dispositivos
+
+Recurso: {{{color(#98ff98,/v1/devices)}}}
+
+*** Adicionar nuevo Dispositivo
+
+#+attr_html: :align left
+Solicitud (~POST~):
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+begin_src restclient
+POST http://localhost:8081/v1/devices
+Content-Type: application/json
+{
+    "name": "Linux - 1",
+    "deviceType": {
+        "name": "linux"
+    }
+}
+#+end_src
+#+REVEAL_HTML: </div>
+
+#+attr_html: :align left
+Respuesta:
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+ATTR_REVEAL: :frag (appear)
+#+BEGIN_SRC jsonc
+{
+    "id": 6,
+    "name": "Linux - 1",
+    "customerId": 0,
+    "deviceType": {
+        "id": 1,
+        "name": "linux"
+    }
+}
+// HTTP/1.1 201
+// Content-Type: application/json
+// Request duration: 0.036231s
+#+END_SRC
+#+REVEAL_HTML: </div>
+
+*** Eliminar un Dispositivo
+
+#+attr_html: :align left
+Solicitud (~DELETE~):
+#+begin_src restclient
+DELETE http://localhost:8081/v1/devices/6
+#+end_src
+
+#+attr_html: :align left
+Respuesta:
+#+ATTR_REVEAL: :frag (appear)
+#+BEGIN_SRC js
+// HTTP/1.1 200
+// Request duration: 0.030906s
+#+END_SRC
+
+** Relaciones entre Servicios y Dispositivos
+
+Recurso: {{{color(#98ff98,/v1/services/rels/device)}}}
+
+*** Adicionar nuevo Servicio a Dispositivo
+
+#+attr_html: :align left
+Solicitud (~POST~):
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+begin_src restclient
+POST http://localhost:8081/v1/services/rels/device
+Content-Type: application/json
+{
+    "device" : "Windows - 2",
+    "service" : "Backup"
+}
+#+end_src
+#+REVEAL_HTML: </div>
+
+#+attr_html: :align left
+Respuesta:
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+ATTR_REVEAL: :frag (appear)
+#+BEGIN_SRC jsonc
+{
+    "device": "Windows - 2",
+    "service": "Backup",
+    "enabled": true
+}
+// HTTP/1.1 201
+// Content-Type: application/json
+// Request duration: 0.083500s
+#+END_SRC
+#+REVEAL_HTML: </div>
+
+*** Eliminar un Servicio de un Dispositivo
+
+#+attr_html: :align left
+Solicitud (~DELETE~):
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+begin_src restclient
+DELETE http://localhost:8081/v1/services/rels/device
+Content-Type: application/json
+{
+    "device" : "Windows - 2",
+    "service" : "Backup"
+}
+#+end_src
+#+REVEAL_HTML: </div>
+
+#+attr_html: :align left
+Respuesta:
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+ATTR_REVEAL: :frag (appear)
+#+BEGIN_SRC jsonc
+{
+    "device": "Windows - 2",
+    "service": "Backup",
+    "enabled": false
+}
+// HTTP/1.1 200
+// Content-Type: application/json
+// Request duration: 0.083500s
+#+END_SRC
+#+REVEAL_HTML: </div>
+
+** Reportes: Costo total por usuario
+
+/v1/devices
+
+** Cache: Costo total por dispositivo
+
+/v1/devices
+
+
+* Patrones
+
+[[file:img/resources-pattern.png]]
+
+**  Decorador (/Decorator/ )
+
+#+ATTR_HTML: :width 75% :align center
+[[file:img/decorator-pattern-definition.png]]
+
+
+
+** Decorador {{{color(#32cd32,Pros)}}}/{{{color(#ff6347,Cons)}}}
+
+#+ATTR_REVEAL: :frag (appear)
++ {{{color(#32cd32,Puede extender el comportamiento de un objeto sin crear una nueva subclase.)}}}
++ {{{color(#32cd32,Puede agregar o eliminar responsabilidades de un objeto en tiempo de ejecución.)}}}
++ {{{color(#32cd32,Puede combinar varios comportamientos envolviendo un objeto en varios decoradores.)}}}
++ {{{color(#32cd32,Principio de responsabilidad única. Puede dividir una clase monolítica que implementa muchas variantes posibles de comportamiento en varias clases más pequeñas.)}}}
+
+
+** Decorador {{{color(#32cd32,Pros)}}}/{{{color(#ff6347,Cons)}}}
+
+#+ATTR_REVEAL: :frag (appear)
++ {{{color(#ff6347,Es difícil eliminar un decorador específico de la pila de decoradores.)}}}
++ {{{color(#ff6347,Es difícil implementar un decorador de tal manera que su comportamiento no dependa del orden en la pila de decoradores.)}}}
++ {{{color(#ff6347,El código de configuración inicial de las capas puede verse bastante feo.)}}}
+
+#  LocalWords:  Monitoreo RMM Gradle cUrl Postman Git
